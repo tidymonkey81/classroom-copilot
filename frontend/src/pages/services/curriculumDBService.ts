@@ -3,7 +3,7 @@ export async function uploadCurriculum(file: File, backendUrl: string) {
     formData.append("file", file);
   
     try {
-      const response = await fetch(`${backendUrl}/curriculum/upload-subject-curriculum`, {
+      const response = await fetch(`${backendUrl}/database/curriculum/upload-subject-curriculum`, {
         method: 'POST',
         body: formData,
       });

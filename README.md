@@ -12,6 +12,7 @@ An AI copilot for learners and educators.
     - [Prerequisites](#prerequisites)
     - [Steps](#steps)
   - [Usage](#usage)
+    - [Transcribe Audio](#transcribe-audio)
   - [Roadmap](#roadmap)
   - [Contributing](#contributing)
   - [License](#license)
@@ -52,7 +53,12 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
     ```
 
 ## Usage
-Provide detailed instructions on how to use the application, including any necessary commands and configurations.
+### Transcribe Audio
+To transcribe an MP3 file, send a POST request to `/transcribe` with the file.
+Example using `curl`:
+```sh
+curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@path/to/your/audio.mp3"
+```
 
 ## Roadmap
 - [ ] Feature 1: Description

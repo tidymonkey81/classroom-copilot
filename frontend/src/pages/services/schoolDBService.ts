@@ -3,7 +3,7 @@ export async function createSchoolNode(file: File, backendUrl: string) {
     formData.append("file", file);
   
     try {
-      const response = await fetch(`${backendUrl}/school/create-school`, {
+      const response = await fetch(`${backendUrl}/database/school/create-school`, {
         method: 'POST',
         body: formData,
       });

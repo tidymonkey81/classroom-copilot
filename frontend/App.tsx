@@ -4,6 +4,7 @@ import Header from './src/pages/Nav/Header';
 import Sidebar from './src/pages/Nav/Sidebar';
 import Home from './src/pages/homePage';
 import Admin from './src/pages/adminPage';
+import Tools from './src/pages/toolsPage';
 import Flow from './src/pages/flowPage';
 import Draw from './src/pages/drawPage';
 import DrawFile from './src/pages/Labs/DrawFile';
@@ -19,6 +20,7 @@ export function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/tools" element={<Tools />} />
       <Route path="/flow" element={<Flow />} />
       <Route path="/draw" element={<Draw />} />
       <Route path="/labs/draw-file" element={<DrawFile />} />

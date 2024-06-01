@@ -8,7 +8,11 @@ async def transcribe_audio(file: UploadFile = File(...)):
     if file.content_type != "audio/mpeg":
         raise HTTPException(status_code=400, detail="Invalid file type. Only MP3 files are supported.")
 
-    model_size = "large-v3"
+    #model_size = "large-v3"
+    #model_size = "medium"
+    model_size = "small"
+    #model_size = "tiny"
+    
     # model = WhisperModel(model_size, device="cuda", compute_type="float16")
 
     # or run on GPU with INT8

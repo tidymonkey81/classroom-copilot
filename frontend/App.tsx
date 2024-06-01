@@ -39,7 +39,7 @@ export function WrappedApp() {
         <div style={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           <Sidebar />
           <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-            <CopilotKit publicApiKey="your_api_key_here">
+            <CopilotKit runtimeUrl="http://localhost:8000/llm/ollama_copilot_prompt">
               <div style={{ position: 'relative', zIndex: 1000 }}>
                 <CopilotPopup />
               </div>

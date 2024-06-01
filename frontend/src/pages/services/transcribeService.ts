@@ -1,4 +1,4 @@
-async function transcribeMP3(file: File, backendUrl: string) {
+export async function transcribeMP3(file: File, backendUrl: string) {
     const formData = new FormData();
     formData.append("file", file);
   
@@ -20,6 +20,4 @@ async function transcribeMP3(file: File, backendUrl: string) {
       alert('MP3 Upload failed!');
     }
   }
-
-export default transcribeMP3;
 

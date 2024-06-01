@@ -18,3 +18,8 @@ html, body, #root {
   flex-grow: 1;
   overflow: hidden;
 }
+
+.container {
+  max-height: 500px; /* Adjust based on your preference */
+  overflow-y: auto; /* Enables vertical scrolling */
+}

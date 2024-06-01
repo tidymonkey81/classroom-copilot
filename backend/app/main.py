@@ -3,6 +3,7 @@ from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
 from .routers.database import calendar, curriculum, timetable, school, admin
 from .routers.transcribe import faster_whisper
+from .routers.llm import ollama
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv(find_dotenv())
@@ -24,3 +25,4 @@ app.include_router(school.router, prefix="/database/school", tags=["School"])
 app.include_router(timetable.router, prefix="/database/timetable", tags=["Timetable"])
 app.include_router(curriculum.router, prefix="/database/curriculum", tags=["Curriculum"])
 app.include_router(faster_whisper.router, prefix="/transcribe/local", tags=["Transcription"])
+app.include_router(ollama.router, prefix="/llm", tags=["LLM"])

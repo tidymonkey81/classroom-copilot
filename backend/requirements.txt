@@ -6,3 +6,4 @@ pandas
 requests
 openpyxl
 faster-whisper
+ollama

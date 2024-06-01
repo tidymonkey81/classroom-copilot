@@ -3,6 +3,7 @@
 An AI copilot for learners and educators.
 
 ## Table of Contents
+
 - [Classroom Copilot](#classroom-copilot)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)

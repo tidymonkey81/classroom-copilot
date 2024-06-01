@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
-from .routers import calendar, curriculum, timetable, school, admin
+from .routers.database import calendar, curriculum, timetable, school, admin
+from .routers.transcribe import whisper
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv(find_dotenv())
@@ -17,9 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(calendar.router, prefix="/calendar", tags=["Calendar"])
-app.include_router(curriculum.router, prefix="/curriculum", tags=["Curriculum"])
-app.include_router(timetable.router, prefix="/timetable", tags=["Timetable"])
-app.include_router(school.router, prefix="/school", tags=["School"])
-app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+app.include_router(admin.router, prefix="/database/admin", tags=["Admin"])
+app.include_router(calendar.router, prefix="/database/calendar", tags=["Calendar"])
+app.include_router(school.router, prefix="/database/school", tags=["School"])
+app.include_router(timetable.router, prefix="/database/timetable", tags=["Timetable"])
+app.include_router(curriculum.router, prefix="/database/curriculum", tags=["Curriculum"])
 
+app.include_router(whisper.router, prefix="/transcribe/local/whisper", tags=["Whisper"])

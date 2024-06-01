@@ -1,4 +1,20 @@
-.nav {
-  background-color: rgb(0, 217, 255);
-  padding: 0px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+#root > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#root > div > div {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
 }

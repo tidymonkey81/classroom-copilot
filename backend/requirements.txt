@@ -5,3 +5,4 @@ neo4j
 pandas
 requests
 openpyxl
+uvloop          # WhisperServer

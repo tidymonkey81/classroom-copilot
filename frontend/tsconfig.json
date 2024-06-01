@@ -27,7 +27,7 @@
     "vite.config.ts",
     "./src/setupTests.ts",
     "eslint.config.js"
-  ],
+, "src/pages/.archive/CC", "src/pages/.archive/MenuBar.tsx", "src/pages/.archive/CCAdmin.tsx", "src/pages/.archive/SchoolAdmin.tsx", "src/pages/.archive/FlowDraw.tsx", "src/pages/.archive/CC.tsx"  ],
   "exclude": [
   ],
   "references": [{ "path": "./tsconfig.node.json" }]

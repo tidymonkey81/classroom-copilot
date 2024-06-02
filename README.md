@@ -30,6 +30,23 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
 - Node.js
 - Docker
 
+## User Authentication and Role Management
+
+To set up user authentication and manage user roles and permissions, follow these guidelines:
+
+### Setting up Firebase Authentication
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Create a new project or select an existing one.
+3. Navigate to the "Authentication" section and enable the sign-in methods you want to use (e.g., email/password, Google, Facebook).
+4. Install the Firebase SDK in your project: `npm install firebase`.
+5. Initialize Firebase in your application with your project's credentials. You can find the necessary configuration in your Firebase project settings.
+
+### Managing User Roles and Permissions
+1. Use the React Context API to manage user state across your application.
+2. Create a context that holds the user's authentication state and role.
+3. On user login, fetch the user's role from your database and store it in the context.
+4. Use React Router to create protected routes that check the user's role before rendering the appropriate dashboard or redirecting to a login page.
+
 ## Roadmap
 
 ### Current Development Phase

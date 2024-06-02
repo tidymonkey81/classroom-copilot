@@ -14,6 +14,8 @@ An AI copilot for learners and educators.
   - [Usage](#usage)
     - [Transcribe Audio](#transcribe-audio)
   - [Roadmap](#roadmap)
+    - [Current Development Phase](#current-development-phase)
+    - [Future Plans](#future-plans)
   - [Contributing](#contributing)
   - [License](#license)
   - [Contact](#contact)
@@ -63,18 +65,22 @@ curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H
 ## Roadmap
 
 ### Current Development Phase
-- [ ]
-- [ ] **CopilotKit**
-  - Implement basic chat.
+- [ ] **TlDraw**
+  - Installed
 
-- [ ] **User Authentication** development
-  - Implement user registration and login. development
+- [ ] **React-Flow**
+  - Installed
+  
+- [ ] **CopilotKit**
+  - Installed
+
+- [ ] **User Authentication**
+  - Implement user registration and login.
   - Secure user data with encryption. production
 
-- [ ] **Real-Time Collaboration** development
-  - Develop features for real-time document editing. development
+- [ ] **Real-Time Collaboration**
+  - Develop features for real-time document editing.
   
-
 - [ ] **Advanced AI Features**
   - Enhance transcription accuracy.
   - Develop AI-driven study recommendations based on user behavior.
@@ -97,7 +103,7 @@ curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H
 5. Open a Pull Request.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under a KevlarAI license.
 
 ## Contact
 For any inquiries, please contact [kcar@kevlarai.com](mailto:kcar@kevlarai.com).

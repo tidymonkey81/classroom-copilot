@@ -42,9 +42,26 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
       - Student (name, timetable, learning styles etc)
     - Scheduling data (global calendar, school calendars, teacher calendars, student calendars etc)
     - Curriculum data (subjects, topics, lessons, learning statements etc)
+  - Note: We are planning a transition towards a distributed graph database solution to enhance scalability and performance.
   - TODO:
     - [ ] Rewrite curriculum import code
     - [ ] Move remaining code from ipynb
+
+- [ ] **Transition to Distributed Graph Database**
+  - We are moving away from Neo4J to an open-source distributed graph database to improve scalability and fault tolerance.
+  - This transition will allow us to handle larger datasets and provide a more robust infrastructure for our application.
+  - TODO:
+    - [ ] Evaluate and select a suitable distributed graph database
+    - [ ] Design and implement the migration strategy
+    - [ ] Test the new database with existing data and queries
+
+- [ ] **Permanent Ledger for User-Generated Content**
+  - Implementing a permanent ledger using IPFS and Filecoin for user-generated content to ensure data permanence and incentivize content creation.
+  - This will allow users to access their data in a permanent ledger and incentivize both students and teachers to create content.
+  - TODO:
+    - [ ] Integrate IPFS for storing user-generated content
+    - [ ] Implement Filecoin incentivization structure
+    - [ ] Develop user interfaces for content creation and access
 
 - [ ] **Dashboard**
   - Provides users with a view of personal data

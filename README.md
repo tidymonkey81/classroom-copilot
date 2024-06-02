@@ -61,9 +61,33 @@ curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H
 ```
 
 ## Roadmap
-- [ ] Feature 1: Description
-- [ ] Feature 2: Description
-- [ ] Feature 3: Description
+
+### Current Development Phase
+- [ ]
+- [ ] **CopilotKit**
+  - Implement basic chat.
+
+- [ ] **User Authentication** development
+  - Implement user registration and login. development
+  - Secure user data with encryption. production
+
+- [ ] **Real-Time Collaboration** development
+  - Develop features for real-time document editing. development
+  
+
+- [ ] **Advanced AI Features**
+  - Enhance transcription accuracy.
+  - Develop AI-driven study recommendations based on user behavior.
+
+### Future Plans
+- [ ] **Mobile Application**
+  - Develop a mobile version of the application for iOS and Android.
+
+- [ ] **Integration with LMS**
+  - Integrate with popular Learning Management Systems (LMS) like Moodle and Canvas.
+
+- [ ] **Gamification**
+  - Implement gamification features to increase user engagement.
 
 ## Contributing
 1. Fork the repository.

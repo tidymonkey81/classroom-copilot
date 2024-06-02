@@ -8,11 +8,6 @@ An AI copilot for learners and educators.
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
   - [Tech Stack](#tech-stack)
-  - [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Steps](#steps)
-  - [Usage](#usage)
-    - [Transcribe Audio](#transcribe-audio)
   - [Roadmap](#roadmap)
     - [Current Development Phase](#current-development-phase)
     - [Future Plans](#future-plans)
@@ -34,33 +29,6 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
 ### Prerequisites
 - Node.js
 - Docker
-
-### Steps
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/classroom-copilot.git
-    cd classroom-copilot
-    ```
-2. Copy the environment variables:
-    ```sh
-    cp .env.example .env
-    ```
-3. Build and start the Docker containers:
-    ```sh
-    docker-compose up --build
-    ```
-4. Run tests:
-    ```sh
-    npm run test
-    ```
-
-## Usage
-### Transcribe Audio
-To transcribe an MP3 file, send a POST request to `/transcribe` with the file.
-Example using `curl`:
-```sh
-curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@path/to/your/audio.mp3"
-```
 
 ## Roadmap
 

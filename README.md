@@ -74,15 +74,14 @@ curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H
       - Student (name, timetable, learning styles etc)
     - Scheduling data (global calendar, school calendars, teacher calendars, student calendars etc)
     - Curriculum data (subjects, topics, lessons, learning statements etc)
+  - TODO:
+    - [ ] Rewrite curriculum import code
+    - [ ] Move remaining code from ipynb
 
-- [ ] **File Storage**
-  - Files are currently stored locally alongside the backend
-  - File storage platforms may be implemented later
-  - Types of files stored
-    - School files
-    - Curriculum files
-    - Teaching files
-    - Student work files
+- [ ] **Dashboard**
+  - Provides users with a view of personal data
+  - TODO:
+    - [ ] Decide dashboard template or app
 
 - [ ] **TlDraw**
   - Provides a canvas for structuring teaching and learning content
@@ -92,23 +91,41 @@ curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H
 
 - [ ] **React-Flow**
   - Provides a GUI for planning and scheduling teaching and learning
-    - TODO:
-      - [ ] Get data from Neo4J databases to populate nodes and edges
-      - [ ] Reflect Neo4J database data graph structure in layout of nodes and edges
-      - [ ] Edit data within nodes (for example change lesson titles)
-      - [ ] Allow changes to nodes and relationships to be updated in the Neo4J backend
-      - [ ] Stylise nodes and edges
+  - TODO:
+    - [ ] Get data from Neo4J databases to populate nodes and edges
+    - [ ] Reflect Neo4J database data graph structure in layout of nodes and edges
+    - [ ] Edit data within nodes (for example change lesson titles)
+    - [ ] Allow changes to nodes and relationships to be updated in the Neo4J backend
+    - [ ] Stylise nodes and edges
   
 - [ ] **CopilotKit**
   - Provides an interactive chatbot
+  - TODO:
+    - [ ] Implement OpenAI API requests
+    - [ ] Implement local Ollama requests
+
+- [ ] **File Storage**
+  - Files are currently stored locally alongside the backend
+  - File storage platforms may be implemented later
+  - Types of files stored
+    - School files
+    - Curriculum files
+    - Teaching files
+    - Student work files
+  - TODO:
+    - [ ] Create directory structure for expected data
+
+- [ ] **Advanced AI Features**
+  - Background Agents and User Agents are employed to manage planning, scheduling, teaching and learning
+  - TODO:
+    - [ ] Decide agent framework
 
 - [ ] **User Authentication**
-  - Implement user registration and login.
-  - Secure user data with encryption. production
-  
-- [ ] **Advanced AI Features**
-  - Enhance transcription accuracy.
-  - Develop AI-driven study recommendations based on user behavior.
+  - Teachers and students can access the applicationa and are provided personalised user interfaces.
+  - TODO:
+    - [ ] Implement teacher users
+    - [ ] Implement student users
+    - [ ] Route users to personal pages
 
 ### Future Plans
 - [ ] **Real-Time Collaboration**

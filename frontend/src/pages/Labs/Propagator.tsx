@@ -4,8 +4,8 @@ import "../modules/draw/propagator/Propagator.css";
 import _ from "lodash";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { Tldraw, TldrawApp } from "tldraw";
-import castInput from "../../modules/draw/propagator/castInput";
-import deepDiff from "../../modules/draw/propagator/deepDiff";
+import castInput from "../../utils/tldraw/propagator/castInput";
+import deepDiff from "../../utils/tldraw/propagator/deepDiff";
 import { Analytics } from "@vercel/analytics/react";
 
 // Define types for records and editor

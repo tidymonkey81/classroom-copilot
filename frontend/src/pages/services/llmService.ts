@@ -1,6 +1,6 @@
 export async function sendPrompt(prompt: string, backendUrl: string) {
     try {
-      const response = await fetch(`${backendUrl}/llm/ollama`, {
+      const response = await fetch(`${backendUrl}/llm/ollama_text_prompt`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

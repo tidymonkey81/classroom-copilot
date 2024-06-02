@@ -13,10 +13,10 @@ import {
 	useTools,
 } from 'tldraw'
 import 'tldraw/tldraw.css'
-import { SlideShapeTool } from '../../modules/draw/slides/SlideShapeTool'
-import { SlideShapeUtil } from '../../modules/draw/slides/SlideShapeUtil'
-import { SlidesPanel } from '../../modules/draw/slides/SlidesPanel'
-import { $currentSlide, getSlides, moveToSlide } from '../../modules/draw/slides/useSlides'
+import { SlideShapeTool } from '../../utils/tldraw/slides/SlideShapeTool'
+import { SlideShapeUtil } from '../../utils/tldraw/slides/SlideShapeUtil'
+import { SlidesPanel } from '../../utils/tldraw/slides/SlidesPanel'
+import { $currentSlide, getSlides, moveToSlide } from '../../utils/tldraw/slides/useSlides'
 import '../../modules/draw/slides/slides.css'
 
 const components: TLComponents = {

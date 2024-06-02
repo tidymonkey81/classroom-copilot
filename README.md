@@ -65,27 +65,55 @@ curl -X POST "http://localhost:8000/transcribe" -H "accept: application/json" -H
 ## Roadmap
 
 ### Current Development Phase
+- [ ] **Neo4J Graph Database**
+  - Provides semantic search capabilities using CYPHER queries on rich connected data stored in a graph database.
+  - Data stored in the Neo4J database:
+    - School data (name, location, type, learning stages, staff, students, rooms etc)
+    - User data
+      - Teacher (name, timetable, teaching styles etc)
+      - Student (name, timetable, learning styles etc)
+    - Scheduling data (global calendar, school calendars, teacher calendars, student calendars etc)
+    - Curriculum data (subjects, topics, lessons, learning statements etc)
+
+- [ ] **File Storage**
+  - Files are currently stored locally alongside the backend
+  - File storage platforms may be implemented later
+  - Types of files stored
+    - School files
+    - Curriculum files
+    - Teaching files
+    - Student work files
+
 - [ ] **TlDraw**
-  - Installed
+  - Provides a canvas for structuring teaching and learning content
+  - TODO:
+    - [ ] Create a canvas for every lesson
+    - [ ] Implement transcription and text generation tools (for example for creating keyword definitions for lessons)
 
 - [ ] **React-Flow**
-  - Installed
+  - Provides a GUI for planning and scheduling teaching and learning
+    - TODO:
+      - [ ] Get data from Neo4J databases to populate nodes and edges
+      - [ ] Reflect Neo4J database data graph structure in layout of nodes and edges
+      - [ ] Edit data within nodes (for example change lesson titles)
+      - [ ] Allow changes to nodes and relationships to be updated in the Neo4J backend
+      - [ ] Stylise nodes and edges
   
 - [ ] **CopilotKit**
-  - Installed
+  - Provides an interactive chatbot
 
 - [ ] **User Authentication**
   - Implement user registration and login.
   - Secure user data with encryption. production
-
-- [ ] **Real-Time Collaboration**
-  - Develop features for real-time document editing.
   
 - [ ] **Advanced AI Features**
   - Enhance transcription accuracy.
   - Develop AI-driven study recommendations based on user behavior.
 
 ### Future Plans
+- [ ] **Real-Time Collaboration**
+  - Develop features for real-time document editing.
+
 - [ ] **Mobile Application**
   - Develop a mobile version of the application for iOS and Android.
 

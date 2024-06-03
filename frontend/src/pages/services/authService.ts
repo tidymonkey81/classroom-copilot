@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBPXoabdgnobFHYU4r3jv2nqY_qngmd70Q",
@@ -35,4 +35,14 @@ export const logout = async () => {
 
 export const getCurrentUser = () => {
   return auth.currentUser;
+};
+
+export const register = async (email: string, password: string) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Registration error:", error);
+    throw error;
+  }
 };

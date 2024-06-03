@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from './authService';
 
-const AuthContext = createContext({ user: null, login: async () => {}, logout: async () => {} });
+const AuthContext = createContext({ user: null, login: async (email, password) => {}, logout: async () => {} });
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -18,13 +19,9 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const login = async (email, password) => {
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
-    }
+  const login = (email, password) => {
+    const auth = getAuth();
+    return signInWithEmailAndPassword(auth, email, password);
   };
 
   const logout = async () => {

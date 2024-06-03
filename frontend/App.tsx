@@ -14,8 +14,6 @@ import NotFound from './src/pages/Nav/NotFound';
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotPopup } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
-import { fetchAndDecodeChatCompletion } from "./src/pages/services/utils/fetchChatCompletions";
-import { useFetchChatCompletion } from './src/pages/services/utils/useFetchChatCompletion';
 import { AuthProvider, useAuth } from './src/pages/services/userContext';
 
 const PrivateRoute = ({ children, roles }) => {
@@ -41,7 +39,6 @@ export function App() {
 
 export function WrappedApp() {
   const copilotConfig = { url: "http://localhost:8000/llm/openai_copilot_prompt", body: { model: "gpt-4", options: {} }};
-  const { fetchChatCompletion } = useFetchChatCompletion(copilotConfig);
 
   return (
     <AuthProvider>
@@ -51,19 +48,16 @@ export function WrappedApp() {
           <div style={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
             <Sidebar />
             <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-              <CopilotKit
-                url="http://localhost:8000/llm/openai_copilot_prompt"
-                fetchChatCompletion={fetchChatCompletion}
-              >
+              <CopilotKit url="http://localhost:8000/llm/openai_copilot_prompt">
                 <div style={{ position: 'relative', zIndex: 1000 }}>
                   <CopilotPopup
                     instructions={"Help the user manage their day."}
-                    defaultOpen={true}
+                    defaultOpen={false}
                     labels={{
                       title: "Classroom Copilot",
                       initial: "Hi you! 👋 I can help you manage your day.",
                     }}
-                    clickOutsideToClose={false}
+                    clickOutsideToClose={true}
                   />
                 </div>
                 <App />

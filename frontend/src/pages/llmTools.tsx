@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextField, Container, Box, Typography, Select, MenuItem } from '@mui/material';
-import { sendPrompt, generatePrompt, sendVisionPrompt } from './services/llmService';
+import { sendPrompt, sendVisionPrompt } from './services/llmService';
 
 function LLMTools() {
   const [backendUrl, setBackendUrl] = useState(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}`);

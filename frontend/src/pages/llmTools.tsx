@@ -15,7 +15,7 @@ function LLMTools() {
       alert('Please enter a prompt!');
       return;
     }
-    const responseData = await sendPrompt({ model, prompt, temperature }, backendUrl);
+    const responseData = await sendPrompt({ model, question: prompt, temperature }, backendUrl);
     setResponseMessage(responseData.response);
   };
 

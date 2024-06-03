@@ -23,11 +23,13 @@ client = Client(host=f'http://{ollama_host}:{ollama_port}')
 class UserRequest(BaseModel):
     question: str
     model: str = "llama3"
+    temperature: float = 0.7
 
 @router.post("/ollama_text_prompt")
 async def ollama_text_prompt(user_request: UserRequest):
     model_name = user_request.model
     question = user_request.question
+    temperature = user_request.temperature
 
     supported_models = ["llama2", "llama3", "mistral", "llama3"]
     if model_name not in supported_models:
@@ -35,7 +37,7 @@ async def ollama_text_prompt(user_request: UserRequest):
 
     messages = [{"role": "user", "content": question}]
     try:
-        response = client.chat(model=model_name, messages=messages)
+        response = client.chat(model=model_name, messages=messages, temperature=temperature)
         if "message" in response and "content" in response["message"]:
             return {"model": model_name, "response": response["message"]["content"]}
         else:
@@ -43,6 +45,31 @@ async def ollama_text_prompt(user_request: UserRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+class GenerateRequest(BaseModel):
+    model: str
+    prompt: str
+
+@router.post("/ollama_generate")
+async def ollama_generate(request: GenerateRequest):
+    try:
+        response = client.generate(model=request.model, prompt=request.prompt)
+        return {"model": request.model, "response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class VisionRequest(BaseModel):
+    model: str
+    image_path: str
+    prompt: str
+
+@router.post("/ollama_vision_prompt")
+async def ollama_vision_prompt(request: VisionRequest):
+    try:
+        response = client.vision(model=request.model, image_path=request.image_path, prompt=request.prompt)
+        return {"model": request.model, "response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 class Message(BaseModel):
     role: str
     content: str

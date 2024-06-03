@@ -1,17 +1,16 @@
-export async function sendPrompt(prompt: string, backendUrl: string) {
-    try {
-      const response = await fetch(`${backendUrl}/llm/ollama_text_prompt`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question: prompt }),
-      });
-      const data = await response.json();
-      console.log(data); // Log or handle the response as needed
-      return data.response;
-    } catch (error) {
-      console.error('Error sending prompt:', error);
-      alert('Failed to sendprompt!');
-    }
-  }
+import axios from 'axios';
+
+export const sendPrompt = async (data: { model: string, prompt: string, temperature: number }, backendUrl: string) => {
+  const response = await axios.post(`${backendUrl}/llm/ollama_text_prompt`, data);
+  return response.data;
+};
+
+export const generatePrompt = async (data: { model: string, prompt: string }, backendUrl: string) => {
+  const response = await axios.post(`${backendUrl}/llm/ollama_generate`, data);
+  return response.data;
+};
+
+export const sendVisionPrompt = async (data: { model: string, imagePath: string, prompt: string }, backendUrl: string) => {
+  const response = await axios.post(`${backendUrl}/llm/ollama_vision_prompt`, data);
+  return response.data;
+};

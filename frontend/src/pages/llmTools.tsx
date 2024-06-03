@@ -9,6 +9,7 @@ function LLMTools() {
   const [model, setModel] = useState('llama3');
   const [temperature, setTemperature] = useState(0.7);
   const [imagePath, setImagePath] = useState('');
+  const [visionResponse, setVisionResponse] = useState('');
 
   const handleSendPrompt = async () => {
     if (!prompt) {
@@ -34,7 +35,7 @@ function LLMTools() {
       return;
     }
     const responseData = await sendVisionPrompt({ model, imagePath, prompt }, backendUrl);
-    setResponseMessage(responseData.response);
+    setVisionResponse(responseData.response);
   };
 
   return (
@@ -48,6 +49,11 @@ function LLMTools() {
           onChange={(e) => setBackendUrl(e.target.value)}
           fullWidth
         />
+      </Box>
+      
+      {/* Text Tools Section */}
+      <Box display="flex" flexDirection="column" alignItems="center" gap={2} marginTop="20px">
+        <Typography variant="h5" gutterBottom>Text Tools</Typography>
         <Select
           value={model}
           onChange={(e) => setModel(e.target.value as string)}
@@ -81,19 +87,42 @@ function LLMTools() {
           Generate Prompt
         </Button>
         <TextField
+          label="Text Response"
+          variant="outlined"
+          value={responseMessage}
+          fullWidth
+          multiline
+          minRows={5}
+          InputProps={{
+            readOnly: true,
+          }}
+        />
+      </Box>
+
+      {/* Image Tools Section */}
+      <Box display="flex" flexDirection="column" alignItems="center" gap={2} marginTop="20px">
+        <Typography variant="h5" gutterBottom>Image Tools</Typography>
+        <TextField
           label="Image Path"
           variant="outlined"
           value={imagePath}
           onChange={(e) => setImagePath(e.target.value)}
           fullWidth
         />
+        <TextField
+          label="Image Prompt"
+          variant="outlined"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          fullWidth
+        />
         <Button variant="contained" color="primary" onClick={handleVisionPrompt}>
           Send Vision Prompt
         </Button>
         <TextField
-          label="Response"
+          label="Vision Response"
           variant="outlined"
-          value={responseMessage}
+          value={visionResponse}
           fullWidth
           multiline
           minRows={5}

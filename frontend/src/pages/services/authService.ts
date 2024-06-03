@@ -2,12 +2,12 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  projectId: "your-project-id",
-  storageBucket: "your-storage-bucket",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
+  apiKey: "AIzaSyBPXoabdgnobFHYU4r3jv2nqY_qngmd70Q",
+  authDomain: "classroom-copilot.firebaseapp.com",
+  projectId: "classroom-copilot",
+  storageBucket: "classroom-copilot.appspot.com",
+  messagingSenderId: "449329145608",
+  appId: "1:449329145608:web:5b97f804c62e408a492ebd"
 };
 
 if (!firebase.apps.length) {

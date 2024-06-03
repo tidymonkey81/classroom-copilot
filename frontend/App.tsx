@@ -24,7 +24,6 @@ const PrivateRoute = ({ children, roles }) => {
 
 export function App() {
   return (
-    <AuthProvider>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<PrivateRoute roles={['admin']}><Admin /></PrivateRoute>} />
@@ -35,7 +34,6 @@ export function App() {
         <Route path="/labs/slides" element={<Slides />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </AuthProvider>
   );
 }
 
@@ -44,32 +42,34 @@ export function WrappedApp() {
   const { fetchChatCompletion } = useFetchChatCompletion(copilotConfig);
 
   return (
-    <HashRouter>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-        <Header />
-        <div style={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
-          <Sidebar />
-          <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-            <CopilotKit
-              url="http://localhost:8000/llm/openai_copilot_prompt"
-              fetchChatCompletion={fetchChatCompletion}
-            >
-              <div style={{ position: 'relative', zIndex: 1000 }}>
-                <CopilotPopup
-                  instructions={"Help the user manage their day."}
-                  defaultOpen={true}
-                  labels={{
-                    title: "Classroom Copilot",
-                    initial: "Hi you! 👋 I can help you manage your day.",
-                  }}
-                  clickOutsideToClose={false}
-                />
-              </div>
-              <App />
-            </CopilotKit>
+    <AuthProvider>
+      <HashRouter>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+          <Header />
+          <div style={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
+            <Sidebar />
+            <div style={{ flexGrow: 1, overflow: 'hidden' }}>
+              <CopilotKit
+                url="http://localhost:8000/llm/openai_copilot_prompt"
+                fetchChatCompletion={fetchChatCompletion}
+              >
+                <div style={{ position: 'relative', zIndex: 1000 }}>
+                  <CopilotPopup
+                    instructions={"Help the user manage their day."}
+                    defaultOpen={true}
+                    labels={{
+                      title: "Classroom Copilot",
+                      initial: "Hi you! 👋 I can help you manage your day.",
+                    }}
+                    clickOutsideToClose={false}
+                  />
+                </div>
+                <App />
+              </CopilotKit>
+            </div>
           </div>
         </div>
-      </div>
-    </HashRouter>
+      </HashRouter>
+    </AuthProvider>
   );
 }

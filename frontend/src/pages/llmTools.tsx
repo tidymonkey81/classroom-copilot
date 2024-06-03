@@ -39,7 +39,7 @@ function LLMTools() {
   };
 
   return (
-    <Container maxWidth="md" style={{ marginTop: '20px' }}>
+    <Container maxWidth="md" style={{ marginTop: '20px', height: '100vh', overflowY: 'auto' }}>
       <Typography variant="h4" gutterBottom>Ollama Tools</Typography>
       <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
         <TextField

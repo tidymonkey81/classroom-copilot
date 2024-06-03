@@ -17,7 +17,7 @@ import { SlideShapeTool } from '../../utils/tldraw/slides/SlideShapeTool'
 import { SlideShapeUtil } from '../../utils/tldraw/slides/SlideShapeUtil'
 import { SlidesPanel } from '../../utils/tldraw/slides/SlidesPanel'
 import { $currentSlide, getSlides, moveToSlide } from '../../utils/tldraw/slides/useSlides'
-import '../../modules/draw/slides/slides.css'
+import '../../utils/tldraw/slides/slides.css'
 
 const components: TLComponents = {
 	HelperButtons: SlidesPanel,

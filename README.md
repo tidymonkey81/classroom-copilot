@@ -30,6 +30,23 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
 - Node.js
 - Docker
 
+## User Authentication and Role Management
+
+To set up user authentication and manage user roles and permissions, follow these guidelines:
+
+### Setting up Firebase Authentication
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Create a new project or select an existing one.
+3. Navigate to the "Authentication" section and enable the sign-in methods you want to use (e.g., email/password, Google, Facebook).
+4. Install the Firebase SDK in your project: `npm install firebase`.
+5. Initialize Firebase in your application with your project's credentials. You can find the necessary configuration in your Firebase project settings.
+
+### Managing User Roles and Permissions
+1. Use the React Context API to manage user state across your application.
+2. Create a context that holds the user's authentication state and role.
+3. On user login, fetch the user's role from your database and store it in the context.
+4. Use React Router to create protected routes that check the user's role before rendering the appropriate dashboard or redirecting to a login page.
+
 ## Roadmap
 
 ### Current Development Phase
@@ -42,9 +59,26 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
       - Student (name, timetable, learning styles etc)
     - Scheduling data (global calendar, school calendars, teacher calendars, student calendars etc)
     - Curriculum data (subjects, topics, lessons, learning statements etc)
+  - Note: We are planning a transition towards a distributed graph database solution to enhance scalability and performance.
   - TODO:
     - [ ] Rewrite curriculum import code
     - [ ] Move remaining code from ipynb
+
+- [ ] **Transition to Distributed Graph Database**
+  - We are moving away from Neo4J to an open-source distributed graph database to improve scalability and fault tolerance.
+  - This transition will allow us to handle larger datasets and provide a more robust infrastructure for our application.
+  - TODO:
+    - [ ] Evaluate and select a suitable distributed graph database
+    - [ ] Design and implement the migration strategy
+    - [ ] Test the new database with existing data and queries
+
+- [ ] **Permanent Ledger for User-Generated Content**
+  - Implementing a permanent ledger using IPFS and Filecoin for user-generated content to ensure data permanence and incentivize content creation.
+  - This will allow users to access their data in a permanent ledger and incentivize both students and teachers to create content.
+  - TODO:
+    - [ ] Integrate IPFS for storing user-generated content
+    - [ ] Implement Filecoin incentivization structure
+    - [ ] Develop user interfaces for content creation and access
 
 - [ ] **Dashboard**
   - Provides users with a view of personal data

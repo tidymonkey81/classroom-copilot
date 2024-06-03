@@ -10,6 +10,7 @@ from ollama import Client
 load_dotenv(find_dotenv())
 
 router = APIRouter()
+client = Client(host='http://localhost:11434')
 
 ollama_host = os.getenv("OLLAMA_LOCAL_URL")
 ollama_port = os.getenv("OLLAMA_LOCAL_PORT")

@@ -8,3 +8,4 @@ openpyxl
 faster-whisper
 ollama
 openai
+requests

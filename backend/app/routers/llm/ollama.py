@@ -3,15 +3,16 @@ from fastapi import APIRouter, FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Optional
 import ollama
+from ollama import Client
+import requests
 
 router = APIRouter()
+client = Client(host='http://localhost:11434')
 
-# Define a request model for user input
 class UserRequest(BaseModel):
     question: str
     model: str = "llama3"
 
-# Endpoint to process user questions and generate responses
 @router.post("/ollama_text_prompt")
 async def ollama_text_prompt(user_request: UserRequest):
     model_name = user_request.model
@@ -22,19 +23,13 @@ async def ollama_text_prompt(user_request: UserRequest):
         raise HTTPException(status_code=400, detail="Model not supported")
 
     messages = [{"role": "user", "content": question}]
-    print(f"Model: {model_name}, Question: {question}")
     try:
-        print("Generating response...")
-        response = ollama.chat(model=model_name, messages=messages)
-        print(f"Response: {response}")
+        response = client.chat(model=model_name, messages=messages)
         if "message" in response and "content" in response["message"]:
-            print(f"Response: {response['message']['content']}")
             return {"model": model_name, "response": response["message"]["content"]}
         else:
-            print(f"Invalid response structure from model: {response}")
             raise HTTPException(status_code=500, detail="Invalid response structure from model")
     except Exception as e:
-        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 class Message(BaseModel):

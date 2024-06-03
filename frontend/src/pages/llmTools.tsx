@@ -16,16 +16,7 @@ function LLMTools() {
       alert('Please enter a prompt!');
       return;
     }
-    const responseData = await sendPrompt({ model, question: prompt, temperature }, backendUrl);
-    setResponseMessage(responseData.response);
-  };
-
-  const handleGeneratePrompt = async () => {
-    if (!prompt) {
-      alert('Please enter a prompt!');
-      return;
-    }
-    const responseData = await generatePrompt({ model, prompt }, backendUrl);
+    const responseData = await sendPrompt({ model, prompt, temperature }, backendUrl);
     setResponseMessage(responseData.response);
   };
 
@@ -82,9 +73,6 @@ function LLMTools() {
         />
         <Button variant="contained" color="primary" onClick={handleSendPrompt}>
           Send Text Prompt
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleGeneratePrompt}>
-          Generate Prompt
         </Button>
         <TextField
           label="Text Response"

@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from typing import List, Dict, Optional
 import ollama
 from ollama import Client
-import requests
 
 router = APIRouter()
 client = Client(host='http://localhost:11434')

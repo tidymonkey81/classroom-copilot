@@ -12,7 +12,6 @@ export default function Home() {
     e.preventDefault();
     try {
       await login(email, password);
-      alert("Login successful!");
     } catch (error) {
       alert("Failed to login: " + error.message);
     }

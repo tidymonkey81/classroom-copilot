@@ -3,7 +3,11 @@ import { Button, TextField, Container, Box, Typography, Select, MenuItem } from 
 import { sendPrompt, sendVisionPrompt } from './services/llmService';
 
 function LLMTools() {
-  const [backendUrl, setBackendUrl] = useState(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}`);
+  const backendBaseUrl = import.meta.env.VITE_BACKEND_URL;
+  console.log(backendBaseUrl);
+  const backendBasePort = import.meta.env.VITE_BACKEND_PORT;
+  const backendUrl = `${backendBaseUrl}:${backendBasePort}`;
+  const [backendUrlState, setBackendUrlState] = useState(backendUrl);
   const [prompt, setPrompt] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
   const [model, setModel] = useState('llama3');
@@ -16,7 +20,7 @@ function LLMTools() {
       alert('Please enter a prompt!');
       return;
     }
-    const responseData = await sendPrompt({ model, prompt, temperature }, backendUrl);
+    const responseData = await sendPrompt({ model, prompt, temperature }, backendUrlState);
     setResponseMessage(responseData.response);
   };
 
@@ -25,7 +29,7 @@ function LLMTools() {
       alert('Please enter an image path and a prompt!');
       return;
     }
-    const responseData = await sendVisionPrompt({ model, imagePath, prompt }, backendUrl);
+    const responseData = await sendVisionPrompt({ model, imagePath, prompt }, backendUrlState);
     setVisionResponse(responseData.response);
   };
 
@@ -36,8 +40,8 @@ function LLMTools() {
         <TextField
           label="Backend URL"
           variant="outlined"
-          value={backendUrl}
-          onChange={(e) => setBackendUrl(e.target.value)}
+          value={backendUrlState}
+          onChange={(e) => setBackendUrlState(e.target.value)}
           fullWidth
         />
       </Box>

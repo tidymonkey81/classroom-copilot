@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBPXoabdgnobFHYU4r3jv2nqY_qngmd70Q",
-  authDomain: "classroom-copilot.firebaseapp.com",
-  projectId: "classroom-copilot",
-  storageBucket: "classroom-copilot.appspot.com",
-  messagingSenderId: "449329145608",
-  appId: "1:449329145608:web:5b97f804c62e408a492ebd"
+  apiKey: import.meta.env.VITE_REACT_APP_API_KEY,
+  authDomain: import.meta.env.VITE_REACT_APP_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_REACT_APP_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_REACT_APP_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_REACT_APP_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);

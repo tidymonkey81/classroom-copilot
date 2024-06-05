@@ -10,7 +10,7 @@ from ollama import Client
 load_dotenv(find_dotenv())
 
 router = APIRouter()
-client = Client(host='http://localhost:11434')
+## client = Client(host='http://localhost:11434')
 
 ollama_host = os.getenv("OLLAMA_LOCAL_URL")
 ollama_port = os.getenv("OLLAMA_LOCAL_PORT")
@@ -23,13 +23,22 @@ client = Client(host=f'http://{ollama_host}:{ollama_port}')
 class UserRequest(BaseModel):
     question: str
     model: str = "llama3"
-    temperature: float = 0.7
+    temperature: Optional[float] = None
+    top_p: Optional[float] = None
+    max_tokens: Optional[int] = None
 
 @router.post("/ollama_text_prompt")
 async def ollama_text_prompt(user_request: UserRequest):
+    print(user_request)
+    print("Ollama host:", ollama_host)
+    print("Ollama port:", ollama_port)
     model_name = user_request.model
     question = user_request.question
-    temperature = user_request.temperature
+    options = {
+        "temperature": user_request.temperature,
+        "top_p": user_request.top_p,
+        "max_tokens": user_request.max_tokens,
+    }
 
     supported_models = ["llama2", "llama3", "mistral", "llama3"]
     if model_name not in supported_models:
@@ -37,12 +46,13 @@ async def ollama_text_prompt(user_request: UserRequest):
 
     messages = [{"role": "user", "content": question}]
     try:
-        response = client.chat(model=model_name, messages=messages, temperature=temperature)
+        response = client.chat(model=model_name, messages=messages, options=options)
         if "message" in response and "content" in response["message"]:
             return {"model": model_name, "response": response["message"]["content"]}
         else:
             raise HTTPException(status_code=500, detail="Invalid response structure from model")
     except Exception as e:
+        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 class GenerateRequest(BaseModel):

@@ -12,7 +12,25 @@ export default ({ mode }) => {
     plugins: [react()],
     server: {
       port: parseInt(process.env.VITE_FRONTEND_PORT || '8001', 10),
-      host: true
+      host: true,
+      proxy: {
+        '/llm': {
+          target: `http://${process.env.VITE_BACKEND_URL}:${process.env.VITE_BACKEND_PORT}`,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/llm/, '')
+        },
+        '/database': {
+          target: `http://${process.env.VITE_BACKEND_URL}:${process.env.VITE_BACKEND_PORT}`,
+          changeOrigin: true,
+          secure: false
+        },
+        '/transcribe': {
+          target: `http://${process.env.VITE_BACKEND_URL}:${process.env.VITE_BACKEND_PORT}`,
+          changeOrigin: true,
+          secure: false
+        }
+      }
     },
     test: {
       globals: true,
@@ -21,4 +39,3 @@ export default ({ mode }) => {
     },
   });
 };
-

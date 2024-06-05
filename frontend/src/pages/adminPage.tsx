@@ -6,7 +6,7 @@ import { uploadCurriculum, uploadSubjectCurriculum } from './services/curriculum
 
 function Admin() {
   const [file, setFile] = useState(null);
-  const [backendUrl, setBackendUrl] = useState(`http://localhost:${import.meta.env.VITE_BACKEND_PORT}`);
+  const [backendUrl, setBackendUrl] = useState(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}`);
 
   const handleCreateGlobalSchoolDB = () => {
     createGlobalSchoolDB(backendUrl);

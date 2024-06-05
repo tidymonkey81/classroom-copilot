@@ -14,15 +14,17 @@ function LLMTools() {
   const [temperature, setTemperature] = useState(0.7);
   const [imagePath, setImagePath] = useState('');
   const [visionResponse, setVisionResponse] = useState('');
+  const [top_p, setTop_p] = useState(undefined);
+  const [max_tokens, setMax_tokens] = useState(undefined);
 
   const handleSendPrompt = async () => {
     if (!prompt) {
       alert('Please enter a prompt!');
       return;
     }
-    const responseData = await sendPrompt({ model, prompt, temperature }, backendUrlState);
+    const responseData = await sendPrompt({ model, question: prompt, temperature, top_p, max_tokens });
     setResponseMessage(responseData.response);
-  };
+};
 
   const handleVisionPrompt = async () => {
     if (!imagePath || !prompt) {
@@ -73,6 +75,22 @@ function LLMTools() {
           variant="outlined"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          label="Top P"
+          type="number"
+          variant="outlined"
+          value={top_p}
+          onChange={(e) => setTop_p(parseFloat(e.target.value))}
+          fullWidth
+        />
+        <TextField
+          label="Max Tokens"
+          type="number"
+          variant="outlined"
+          value={max_tokens}
+          onChange={(e) => setMax_tokens(parseInt(e.target.value))}
           fullWidth
         />
         <Button variant="contained" color="primary" onClick={handleSendPrompt}>

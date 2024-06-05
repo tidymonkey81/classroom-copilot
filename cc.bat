@@ -72,4 +72,28 @@ goto docker_menu
 :host_menu
 cls
 echo ===== Run on Host Machine =====
-echo 2a: Run
+echo 2a: Run frontend and backend
+echo 2b: Run only frontend
+echo 2c: Run only backend
+echo R: Return to main menu
+echo.
+set /p choice="Select a host option: "
+
+if "%choice%"=="2a" (
+    start cmd /k "cd frontend && npm run dev"
+    start cmd /k "cd backend && conda activate cc && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    goto host_menu
+)
+if "%choice%"=="2b" (
+    start cmd /k "cd frontend && npm run dev"
+    goto host_menu
+)
+if "%choice%"=="2c" (
+    start cmd /k "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    goto host_menu
+)
+if /i "%choice%"=="R" goto menu
+
+echo Invalid host option, please select a valid sub-option or R to return.
+pause
+goto host_menu

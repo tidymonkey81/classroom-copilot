@@ -17,29 +17,32 @@ import "@copilotkit/react-ui/styles.css";
 import { AuthProvider, useAuth } from './src/pages/services/userContext';
 
 const PrivateRoute = ({ children, roles }) => {
-  const { user } = useAuth();
-  return user && roles.includes(user.role) ? children : <Navigate to="/" />;
+  const { user, role } = useAuth();
+
+  if (!user || role === null) {
+    return <div>Loading...</div>;
+  }
+
+  return roles.includes(role) ? children : <Navigate to="/" />;
 };
 
 export function App() {
   return (
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<PrivateRoute roles={['admin']}><Admin /></PrivateRoute>} />
-        <Route path="/llm-tools" element={<LLMTools />} />
-        <Route path="/transcription-tools" element={<TranscriptionTools />} />
-        <Route path="/flow" element={<Flow />} />
-        <Route path="/draw" element={<Draw />} />
-        <Route path="/labs/draw-file" element={<DrawFile />} />
-        <Route path="/labs/slides" element={<Slides />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/admin" element={<PrivateRoute roles={['admin']}><Admin /></PrivateRoute>} />
+      <Route path="/llm-tools" element={<LLMTools />} />
+      <Route path="/transcription-tools" element={<TranscriptionTools />} />
+      <Route path="/flow" element={<Flow />} />
+      <Route path="/draw" element={<Draw />} />
+      <Route path="/labs/draw-file" element={<DrawFile />} />
+      <Route path="/labs/slides" element={<Slides />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
 export function WrappedApp() {
-  const copilotConfig = { url: "http://localhost:8000/llm/openai_copilot_prompt", body: { model: "gpt-4", options: {} }};
-
   return (
     <AuthProvider>
       <HashRouter>

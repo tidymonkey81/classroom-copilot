@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_REACT_APP_API_KEY,
@@ -12,8 +13,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { auth };
+export { auth, db, getDoc };
 
 export const login = async (email: string, password: string) => {
   try {
@@ -37,13 +39,13 @@ export const getCurrentUser = () => {
   return auth.currentUser;
 };
 
-export const register = async (email: string, password: string) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    console.error("Registration error:", error);
-    throw error;
-  }
+export const registerUser = async (email: string, password: string, role: string = 'user') => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
+  await setDoc(doc(db, 'users', user.uid), { email: user.email, role });
 };
 
+export const getUserRole = async (uid: string) => {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  return userDoc.exists() ? userDoc.data().role : null;
+};

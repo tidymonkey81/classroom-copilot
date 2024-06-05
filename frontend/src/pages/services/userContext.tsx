@@ -1,18 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from './authService';
+import { auth, db, getUserRole, getDoc } from './authService';
+import { doc } from 'firebase/firestore';
 
-const AuthContext = createContext({ user: null, login: async (email, password) => {}, logout: async () => {} });
+const AuthContext = createContext({ user: null, role: null, login: async (email, password) => {}, logout: async () => {} });
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
+        const docRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setRole(docSnap.data().role);
+        }
       } else {
         setUser(null);
+        setRole(null);
       }
     });
 
@@ -34,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

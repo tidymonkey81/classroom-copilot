@@ -4,15 +4,14 @@ import { sendPrompt, sendVisionPrompt } from './services/llmService';
 
 function LLMTools() {
   const backendBaseUrl = import.meta.env.VITE_BACKEND_URL;
-  console.log(backendBaseUrl);
   const backendBasePort = import.meta.env.VITE_BACKEND_PORT;
   const backendUrl = `${backendBaseUrl}:${backendBasePort}`;
   const [backendUrlState, setBackendUrlState] = useState(backendUrl);
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState(''); // Ensure this is initialized to an empty string or other default value
   const [responseMessage, setResponseMessage] = useState('');
   const [model, setModel] = useState('llama3');
-  const [temperature, setTemperature] = useState(0.7);
-  const [imagePath, setImagePath] = useState('');
+  const [temperature, setTemperature] = useState(0.7); // Example of initializing with a default value
+  const [imagePath, setImagePath] = useState(''); // Initialize to an empty string if no initial value
   const [visionResponse, setVisionResponse] = useState('');
   const [top_p, setTop_p] = useState(undefined);
   const [max_tokens, setMax_tokens] = useState(undefined);

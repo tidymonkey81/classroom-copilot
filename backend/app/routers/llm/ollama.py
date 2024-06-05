@@ -29,9 +29,6 @@ class UserRequest(BaseModel):
 
 @router.post("/ollama_text_prompt")
 async def ollama_text_prompt(user_request: UserRequest):
-    print(user_request)
-    print("Ollama host:", ollama_host)
-    print("Ollama port:", ollama_port)
     model_name = user_request.model
     question = user_request.question
     options = {

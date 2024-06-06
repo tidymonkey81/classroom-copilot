@@ -19,11 +19,11 @@ import {
   createTLStore
 } from 'tldraw';
 import 'tldraw/tldraw.css';
-import { SlideShapeTool } from '../utils/tldraw/slides/SlideShapeTool';
-import { SlideShapeUtil } from '../utils/tldraw/slides/SlideShapeUtil';
-import { SlidesPanel } from '../utils/tldraw/slides/SlidesPanel';
-import { $currentSlide, getSlides, moveToSlide } from '../utils/tldraw/slides/useSlides';
-import '../utils/tldraw/slides/slides.css';
+import { SlideShapeTool } from './utils/slides/SlideShapeTool';
+import { SlideShapeUtil } from './utils/slides/SlideShapeUtil';
+import { SlidesPanel } from './utils/slides/SlidesPanel';
+import { $currentSlide, getSlides, moveToSlide } from './utils/slides/useSlides';
+import './utils/slides/slides.css';
 
 // Custom MainMenu Component with Save and Load functionality
 function CustomMainMenu({ onSave, onLoad }) {
@@ -36,13 +36,6 @@ function CustomMainMenu({ onSave, onLoad }) {
           icon="save"
           readonlyOk
           onSelect={onSave}
-        />
-        <TldrawUiMenuItem
-          id="load"
-          label="Load File"
-          icon="folder-open"
-          readonlyOk
-          onSelect={onLoad}
         />
       </TldrawUiMenuGroup>
       <DefaultMainMenuContent />
@@ -188,7 +181,7 @@ function App() {
         onChange={handleFileChange}
       />
       <Tldraw
-        persistenceKey="draw-file-persistence-key-new"
+        persistenceKey="tldraw"
         shapeUtils={[SlideShapeUtil]}
         tools={[SlideShapeTool]}
         components={components}

@@ -16,9 +16,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <div className={`pt-8 ${isOpen ? 'block' : 'hidden'}`}>
         <nav style={{ paddingLeft: '15px' }}>
           <Link to="/labs" className="block py-2">Labs</Link>
-          <Link to="/labs/slides" className="block py-2">Slides</Link>
-          <Link to="/labs/draw-file" className="block py-2">File</Link>
-          <Link to="/labs/propagator" className="block py-2">Propagator</Link>
         </nav>
       </div>
     </aside>

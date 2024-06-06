@@ -9,8 +9,7 @@ import LLMTools from './src/pages/llmTools';
 import TranscriptionTools from './src/pages/transcriptionTools';
 import Flow from './src/pages/flowPage';
 import Draw from './src/pages/drawPage';
-import DrawFile from './src/pages/Labs/DrawFile';
-import Slides from './src/pages/Labs/Slides';
+import LabsPage from './src/pages/labsPage';
 import NotFound from './src/pages/Nav/NotFound';
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotPopup } from "@copilotkit/react-ui";
@@ -37,13 +36,12 @@ export function App() {
       <Route path="/" element={<Login />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/admin" element={<PrivateRoute roles={['admin']}><Admin /></PrivateRoute>} />
-      <Route path="/llm-tools" element={<PrivateRoute><LLMTools /></PrivateRoute>} />
-      <Route path="/transcription-tools" element={<PrivateRoute><TranscriptionTools /></PrivateRoute>} />
-      <Route path="/flow" element={<PrivateRoute><Flow /></PrivateRoute>} />
-      <Route path="/draw" element={<PrivateRoute><Draw /></PrivateRoute>} />
-      <Route path="/labs/draw-file" element={<PrivateRoute><DrawFile /></PrivateRoute>} />
-      <Route path="/labs/slides" element={<PrivateRoute><Slides /></PrivateRoute>} />
+      <Route path="/llm-tools" element={<PrivateRoute roles={['admin', 'superuser']}><LLMTools /></PrivateRoute>} />
+      <Route path="/transcription-tools" element={<PrivateRoute roles={['admin', 'superuser']}><TranscriptionTools /></PrivateRoute>} />
+      <Route path="/flow" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><Flow /></PrivateRoute>} />
+      <Route path="/draw" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><Draw /></PrivateRoute>} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/labs/" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><LabsPage /></PrivateRoute>} />
     </Routes>
   );
 }

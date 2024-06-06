@@ -20,7 +20,7 @@ function LoginPage() {
   return (
     <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
       <Typography variant="h2" component="div" gutterBottom>
-        Classroom Copilot
+        ClassroomCopilot.ai
       </Typography>
       <Typography variant="h6" component="div" gutterBottom>
         {user ? `Welcome, ${user.email}` : "Not logged in"}

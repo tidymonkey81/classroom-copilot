@@ -11,6 +11,7 @@ import {
 	track,
 	useIsToolSelected,
 	useTools,
+	defaultShapeUtils,
 } from 'tldraw'
 import 'tldraw/tldraw.css'
 import { SlideShapeTool } from '../../utils/tldraw/slides/SlideShapeTool'
@@ -92,12 +93,15 @@ const overrides: TLUiOverrides = {
 	},
 }
 
+// Ensure defaultShapeUtils is included correctly
+const combinedShapeUtils = [...defaultShapeUtils, SlideShapeUtil]
+
 const App = track(() => {
 	return (
 		<div style={{ display: 'flex', height: '100%' }}>
 				<Tldraw
 				persistenceKey="slideshow-persistence-key"
-				shapeUtils={[SlideShapeUtil]}
+				shapeUtils={combinedShapeUtils} // Use the combined utilities
 				tools={[SlideShapeTool]}
 				components={components}
 				overrides={overrides}

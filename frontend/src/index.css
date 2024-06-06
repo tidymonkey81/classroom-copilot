@@ -23,3 +23,7 @@ html, body, #root {
   max-height: 500px; /* Adjust based on your preference */
   overflow-y: auto; /* Enables vertical scrolling */
 }
+
+.transition-all {
+  transition: all 0.3s ease;
+}

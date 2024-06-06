@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './src/pages/Nav/Header';
 import Sidebar from './src/pages/Nav/Sidebar';
@@ -49,14 +49,15 @@ export function App() {
 }
 
 export function WrappedApp() {
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <AuthProvider>
       <HashRouter>
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
           <Header />
           <div style={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
-            <Sidebar />
-            <div style={{ flexGrow: 1, overflow: 'hidden' }}>
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+            <div style={{ flexGrow: 1, transition: 'margin-left .5s', marginLeft: isOpen ? '0px' : '0px', width: isOpen ? 'calc(100% - 256px)' : '100%' }}>
               <CopilotKit url="http://localhost:8000/llm/openai_copilot_prompt">
                 <div style={{ position: 'relative', zIndex: 1000 }}>
                   <CopilotPopup

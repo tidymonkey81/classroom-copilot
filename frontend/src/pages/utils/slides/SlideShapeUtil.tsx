@@ -23,7 +23,7 @@ export type SlideShape = TLBaseShape<
 >
 
 export class SlideShapeUtil extends ShapeUtil<SlideShape> {
-	static override type = 'slide' as const // Changed this line
+	static override type = 'slide' as const
 	static override props: ShapeProps<SlideShape> = {
 		w: T.number,
 		h: T.number,

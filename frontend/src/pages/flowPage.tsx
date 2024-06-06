@@ -29,7 +29,7 @@ export default function Flow() {
   );
 
   return (
-    <div style={{ width: '100vw', height: '100%', zIndex: 0 }}>
+    <div style={{ display: 'flex', height: '100%'}}>
       <ReactFlow
         nodes={nodes}
         edges={edges}

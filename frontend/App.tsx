@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './src/pages/Nav/Header';
 import Sidebar from './src/pages/Nav/Sidebar';
+import Login from './src/pages/loginPage';
 import Home from './src/pages/homePage';
 import Admin from './src/pages/adminPage';
 import LLMTools from './src/pages/llmTools';
@@ -16,27 +17,32 @@ import { CopilotPopup } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
 import { AuthProvider, useAuth } from './src/pages/services/userContext';
 
-const PrivateRoute = ({ children, roles }) => {
+const PrivateRoute = ({ children, roles = [] }) => {
   const { user, role } = useAuth();
 
-  if (!user || role === null) {
+  if (!user) {
+    return <Navigate to="/" />;
+  }
+
+  if (role === null) {
     return <div>Loading...</div>;
   }
 
-  return roles.includes(role) ? children : <Navigate to="/" />;
+  return roles.length && !roles.includes(role) ? <Navigate to="/home" /> : children;
 };
 
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/admin" element={<PrivateRoute roles={['admin']}><Admin /></PrivateRoute>} />
-      <Route path="/llm-tools" element={<LLMTools />} />
-      <Route path="/transcription-tools" element={<TranscriptionTools />} />
-      <Route path="/flow" element={<Flow />} />
-      <Route path="/draw" element={<Draw />} />
-      <Route path="/labs/draw-file" element={<DrawFile />} />
-      <Route path="/labs/slides" element={<Slides />} />
+      <Route path="/llm-tools" element={<PrivateRoute><LLMTools /></PrivateRoute>} />
+      <Route path="/transcription-tools" element={<PrivateRoute><TranscriptionTools /></PrivateRoute>} />
+      <Route path="/flow" element={<PrivateRoute><Flow /></PrivateRoute>} />
+      <Route path="/draw" element={<PrivateRoute><Draw /></PrivateRoute>} />
+      <Route path="/labs/draw-file" element={<PrivateRoute><DrawFile /></PrivateRoute>} />
+      <Route path="/labs/slides" element={<PrivateRoute><Slides /></PrivateRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

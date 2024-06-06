@@ -11,6 +11,8 @@ services:
       - cc_backend
     networks:
       - app-network
+    volumes:
+      - data_volume:/data_local
 
   cc_backend:
     build:
@@ -20,6 +22,7 @@ services:
     container_name: cc_backend
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - data_volume:/data_local
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
@@ -44,3 +47,8 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  data_volume:
+    name: data_volume
+    driver: local

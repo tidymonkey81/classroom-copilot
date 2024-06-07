@@ -127,6 +127,24 @@ const SlidesExample = track(() => {
     fileInputRef.current.click();
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const content = e.target.result;
+          const snapshot = JSON.parse(content);
+          store.clear(); // Clear the existing items from the canvas
+          store.loadSnapshot(snapshot);
+        } catch (error) {
+          console.error('Error loading snapshot:', error);
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   const components: TLComponents = {
     MainMenu: (props) => <CustomMainMenu {...props} onSave={handleSaveCopy} onLoad={handleLoadFile} />,
     HelperButtons: SlidesPanel,
@@ -153,19 +171,6 @@ const SlidesExample = track(() => {
     PageMenu: CustomPageMenu,
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        const snapshot = JSON.parse(content);
-        store.loadSnapshot(snapshot);
-      };
-      reader.readAsText(file);
-    }
-  };
-
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <input
@@ -187,3 +192,4 @@ const SlidesExample = track(() => {
 });
 
 export default SlidesExample;
+

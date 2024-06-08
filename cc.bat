@@ -26,11 +26,12 @@ cls
 echo ===== Docker-compose Options =====
 echo 1a: Instantiate all containers
 echo 1b: Instantiate backend and Neo4j
-echo 1c: Instantiate only backend
-echo 1d: Instantiate only Neo4j
-echo 1e: Rebuild and instantiate all containers
-echo 1f: Rebuild and instantiate backend and Neo4j containers
-echo 1g: Rebuild and instantiate only backend container
+echo 1c: Instantiate only frontend
+echo 1d: Instantiate only backend
+echo 1e: Instantiate only Neo4j
+echo 1f: Rebuild and instantiate all containers
+echo 1g: Rebuild and instantiate backend and Neo4j containers
+echo 1h: Rebuild and instantiate only backend container
 echo R: Return to main menu
 echo.
 set /p choice="Select a Docker option: "
@@ -44,23 +45,35 @@ if "%choice%"=="1b" (
     goto docker_menu
 )
 if "%choice%"=="1c" (
-    docker-compose up cc_backend
+    docker-compose up cc_frontend
     goto docker_menu
 )
 if "%choice%"=="1d" (
-    docker-compose up cc_neo4j
+    docker-compose up cc_backend
     goto docker_menu
 )
 if "%choice%"=="1e" (
-    docker-compose up --build
+    docker-compose up cc_neo4j
     goto docker_menu
 )
 if "%choice%"=="1f" (
-    docker-compose up --build cc_backend cc_neo4j
+    docker-compose up --build
     goto docker_menu
 )
 if "%choice%"=="1g" (
+    docker-compose up --build cc_backend cc_neo4j
+    goto docker_menu
+)
+if "%choice%"=="1h" (
+    docker-compose up --build cc_frontend
+    goto docker_menu
+)
+if "%choice%"=="1i" (
     docker-compose up --build cc_backend
+    goto docker_menu
+)
+if "%choice%"=="1j" (
+    docker-compose up --build cc_neo4j
     goto docker_menu
 )
 if /i "%choice%"=="R" goto menu

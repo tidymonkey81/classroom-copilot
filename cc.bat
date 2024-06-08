@@ -81,7 +81,7 @@ set /p choice="Select a host option: "
 
 if "%choice%"=="2a" (
     start cmd /k "cd frontend && npm run dev"
-    start cmd /k "cd backend && conda activate cc && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    start cmd /k "cd backend && conda activate cc && uvicorn app.main:app --host 0.0.0.0 --port 8500"
     goto host_menu
 )
 if "%choice%"=="2b" (
@@ -89,7 +89,7 @@ if "%choice%"=="2b" (
     goto host_menu
 )
 if "%choice%"=="2c" (
-    start cmd /k "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    start cmd /k "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8500"
     goto host_menu
 )
 if /i "%choice%"=="R" goto menu

@@ -2,6 +2,5 @@ FROM node:latest
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
-COPY . .
-EXPOSE 8001
+COPY . 8501
 CMD ["npm", "run", "start"]

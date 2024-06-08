@@ -5,7 +5,7 @@ RUN python -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     pip install -r requirements.txt
 COPY . .
-EXPOSE 8000
+EXPOSE 8500
 
 # Ensure commands run inside the virtual environment
-CMD ["/opt/venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/opt/venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8500"]

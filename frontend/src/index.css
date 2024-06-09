@@ -27,3 +27,8 @@ html, body, #root {
 .transition-all {
   transition: all 0.3s ease;
 }
+
+.MuiInputBase-input {
+  background: transparent;
+  text-shadow: none;
+}

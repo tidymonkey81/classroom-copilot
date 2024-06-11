@@ -9,6 +9,7 @@ services:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     depends_on:
       - cc_backend
+      - cc_whisper
     networks:
       - app-network
     volumes:
@@ -27,6 +28,25 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
       - cc_neo4j
+    networks:
+      - app-network
+  
+  cc_whisper:
+    build:
+      context: ./backend/app/modules/WhisperLive
+    container_name: cc_whisper
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ports:
+      - "${WHISPER_PORT}:${WHISPER_PORT}"
     networks:
       - app-network
 

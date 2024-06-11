@@ -101,10 +101,11 @@ def close_driver(driver):
     driver.close()
 
 # Function to create a node in Neo4j via HTTP
-def create_node_http(database, label, properties=None):
-    query = f"CREATE (n:{label} $props) RETURN n"
-    params = {"props": properties}
-    return send_neo4j_request(query, database=database, params=params)
+def create_node_http(node_type: str, node_data: dict, db=None):
+    query = f"CREATE (n:{node_type} $props) RETURN id(n)"
+    params = {"props": node_data}
+    response = send_neo4j_request(query, database=db, params=params)
+    return response['results'][0]['data'][0]['meta'][0]['id']
 
 # Function to create a node in Neo4j
 def create_node(session, label, properties, returns=False):
@@ -170,14 +171,14 @@ def _find_node_by_element_id(tx, transaction_id):
     return record[0] if record is not None else None  # Handle no record found
 
 # Function to create a relationship between two nodes in Neo4j via HTTP
-def create_relationship_http(start_node_id, end_node_id, rel_type, properties=None):
+def create_relationship_http(relationship_data: dict, db=None):
     query = """
     MATCH (a), (b) WHERE id(a) = $start_id AND id(b) = $end_id
     CREATE (a)-[r:{rel_type}]->(b)
     RETURN r
     """
-    params = {"start_id": start_node_id, "end_id": end_node_id, "rel_type": rel_type, "props": properties or {}}
-    return send_neo4j_request("/db/neo4j/tx/commit", query, params)
+    params = {"start_id": relationship_data['start_node']['id'], "end_id": relationship_data['end_node']['id'], "rel_type": relationship_data['relationship_type'], "props": relationship_data.get('properties', {})}
+    return send_neo4j_request("/db/neo4j/tx/commit", query, params, db=db)
 
 # Function to create a relationship between two nodes in Neo4j
 def create_relationship(session, start_node, end_node, label, properties=None, returns=False):

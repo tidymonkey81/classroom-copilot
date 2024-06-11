@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Button, TextField, Container, Box, Typography, Input } from '@mui/material';
-import { transcribeMP3 } from './services/transcribeService';
+import { transcribeMP3, startStreaming, stopStreaming } from './services/transcribeService';
 
 function TranscriptionTools() {
   const [file, setFile] = useState<File | null>(null);
   const [backendUrl, setBackendUrl] = useState(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}`);
+  const [transcript, setTranscript] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
 
   const handleTranscribeMP3 = () => {
     if (!file) {
@@ -12,6 +14,16 @@ function TranscriptionTools() {
       return;
     }
     transcribeMP3(file, backendUrl);
+  };
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopStreaming();
+      setIsRecording(false);
+    } else {
+      startStreaming(setTranscript, backendUrl);
+      setIsRecording(true);
+    }
   };
 
   return (
@@ -33,6 +45,18 @@ function TranscriptionTools() {
         />
         <Button variant="contained" color="primary" onClick={handleTranscribeMP3}>
           Transcribe MP3
+        </Button>
+        <TextField
+          label="Transcription"
+          multiline
+          rows={10}
+          variant="outlined"
+          fullWidth
+          value={transcript}
+          margin="normal"
+        />
+        <Button variant="contained" color="secondary" onClick={toggleRecording}>
+          {isRecording ? 'Stop Recording' : 'Start Recording'}
         </Button>
       </Box>
     </Container>

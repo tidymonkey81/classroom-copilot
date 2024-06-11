@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, Container, Box, Typography, Input } from '@mui/material';
 import { createGlobalSchoolDB } from './services/adminDBService';
-import { createSchoolNode } from './services/schoolDBService';
+import { createSchoolNode, createSchoolNodes } from './services/schoolDBService';
 import { uploadCurriculum, uploadSubjectCurriculum } from './services/curriculumDBService';
 
 function Admin() {
@@ -18,6 +18,14 @@ function Admin() {
       return;
     }
     createSchoolNode(file, backendUrl);
+  };
+
+  const handleCreateSchoolNodesBatch = () => {
+    if (!file) {
+      alert('Please select a file first!');
+      return;
+    }
+    createSchoolNodesBatch(file, backendUrl);
   };
 
   const handleUploadCurriculum = () => {
@@ -58,6 +66,9 @@ function Admin() {
         />
         <Button variant="contained" color="secondary" onClick={handleCreateSchoolNode}>
           Create School Node
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleCreateSchoolNodesBatch}>
+          Create School Nodes
         </Button>
         <Button variant="contained" color="secondary" onClick={handleUploadCurriculum}>
           Upload Curriculum

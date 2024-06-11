@@ -8,6 +8,12 @@ An AI copilot for learners and educators.
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
   - [Tech Stack](#tech-stack)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+      - [WhisperLive](#whisperlive)
+  - [User Authentication and Role Management](#user-authentication-and-role-management)
+    - [Setting up Firebase Authentication](#setting-up-firebase-authentication)
+    - [Managing User Roles and Permissions](#managing-user-roles-and-permissions)
   - [Roadmap](#roadmap)
     - [Current Development Phase](#current-development-phase)
     - [Future Plans](#future-plans)
@@ -29,6 +35,13 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
 ### Prerequisites
 - Node.js
 - Docker
+- WhisperLive
+- Ollama
+- 
+
+#### WhisperLive
+ - [WhisperLive GitHub repo](https://github.com/collabora/WhisperLive)
+ - [Installing the NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 
 ## User Authentication and Role Management
 

@@ -11,7 +11,7 @@ export default ({ mode }) => {
   return defineConfig({
     plugins: [react()],
     server: {
-      port: parseInt(process.env.VITE_FRONTEND_PORT || '8501', 10),
+      port: parseInt(process.env.VITE_FRONTEND_PORT || '9501', 10),
       host: true,
       proxy: {
         '/llm': {

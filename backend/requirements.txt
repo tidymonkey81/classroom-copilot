@@ -9,3 +9,9 @@ faster-whisper
 ollama
 openai
 websockets
+
+# WhisperLive client
+PyAudio
+ffmpeg-python
+scipy
+websocket-client

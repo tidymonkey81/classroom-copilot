@@ -26,7 +26,6 @@ def main():
         save_output_recording=True,
         output_recording_filename=f"{user_transcript_dir}/output_recording.wav",
         output_transcription_path=f"{user_transcript_dir}/output.srt",
-        # callback=timestamped_callback
     )
 
     client()

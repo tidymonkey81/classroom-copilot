@@ -18,7 +18,7 @@ def main():
     user_transcript_dir = setup_directories(user_dir, user_id)
 
     client = TranscriptionClient(
-        "localhost",
+        "192.168.0.20",
         9090,
         lang="en",
         translate=False,

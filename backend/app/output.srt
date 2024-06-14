@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:06,599
+ So this one is just a single line of text and I guess it finishes with something.
+
+2
+00:00:06,599 --> 00:00:12,032
+ I don't really know what that bit is that says something.
+
+3
+00:00:12,032 --> 00:00:14,336
+ Okay, so we've just made a new...
+
+4
+00:00:14,336 --> 00:00:15,336
+ in.
+
+5
+00:00:15,336 --> 00:00:21,248
+ So it does just open up wherever I rest, but that's now very good.
+
+6
+00:00:21,248 --> 00:00:22,783
+ So we're buying one that.
+
+7
+00:00:22,783 --> 00:00:23,807
+ in that area.
+
+8
+00:00:23,807 --> 00:00:31,807
+ Okay, so now we have data local. That is what we want. This is where we want to run this, I guess.
+
+9
+00:00:31,807 --> 00:00:34,816
+ first we want to run it for here though
+
+10
+00:00:34,816 --> 00:00:38,816
+ that sound right it's all, you're just going to have to set those directories
+
+11
+00:00:38,816 --> 00:00:40,192
+ is definitely.
+

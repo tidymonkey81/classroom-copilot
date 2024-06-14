@@ -30,8 +30,8 @@ dist-ssr
 # Secrets
 .env
 
-# Data directories
-data_local/schools/
+# Data 
+data/*
 
 # Model directories
 backend/app/modules/WhisperLive/whisper_live/models/*

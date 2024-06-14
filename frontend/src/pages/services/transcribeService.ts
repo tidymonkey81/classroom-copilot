@@ -26,7 +26,8 @@ let audioContext, source, processor, ws;  // Define these in a scope accessible 
 export function startStreaming(setTranscript: React.Dispatch<React.SetStateAction<string>>, backendUrl: string): void {
   // Initialize audio capture and WebSocket connection
   audioContext = new AudioContext();
-  ws = new WebSocket(`ws://${backendUrl.replace(/^http[s]?:\/\//, '')}/transcribe/local/faster-whisper-audio-stream`);
+  /// ws = new WebSocket(`ws://${backendUrl.replace(/^http[s]?:\/\//, '')}/transcribe/local/faster-whisper-audio-stream`);
+  ws = new WebSocket(`ws://${backendUrl.replace(/^http[s]?:\/\//, '')}/transcribe/live/whisper-live-audio-stream`);
 
   // Handle incoming WebSocket messages (transcription updates)
   ws.onmessage = (event) => {
@@ -55,5 +56,14 @@ export function stopStreaming() {
   if (processor) processor.disconnect();
   if (source) source.disconnect();
   if (audioContext) audioContext.close();
+  if (ws) ws.close();
+}
+
+
+export function startWhisperLiveWebsocket(setTranscript: React.Dispatch<React.SetStateAction<string>>, backendUrl: string): void {
+  ws = new WebSocket(`ws://${backendUrl.replace(/^http[s]?:\/\//, '')}/transcribe/live/whisper-live-audio-stream`);
+}
+
+export function stopWhisperLiveWebsocket() {
   if (ws) ws.close();
 }

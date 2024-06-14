@@ -25,7 +25,7 @@ goto menu
 cls
 echo ===== Docker-compose Options =====
 echo 1a: Instantiate all containers
-echo 1b: Instantiate backend, Whisper, and Neo4j
+echo 1b: Instantiate frontend and backend
 echo 1c: Instantiate only frontend
 echo 1d: Instantiate only backend
 echo 1e: Instantiate only Whisper
@@ -44,7 +44,7 @@ if "%choice%"=="1a" (
     goto docker_menu
 )
 if "%choice%"=="1b" (
-    docker-compose up cc_backend cc_whisper cc_neo4j
+    docker-compose up cc_frontend cc_backend
     goto docker_menu
 )
 if "%choice%"=="1c" (
@@ -92,7 +92,7 @@ goto docker_menu
 :host_menu
 cls
 echo ===== Run on Host Machine =====
-echo 2a: Run frontend, backend and Whisper
+echo 2a: Run frontend and backend
 echo 2b: Run only frontend
 echo 2c: Run only backend
 echo 2d: Run only Whisper
@@ -103,7 +103,6 @@ set /p choice="Select a host option: "
 if "%choice%"=="2a" (
     start cmd /k "cd frontend && npm run dev"
     start cmd /k "cd backend && conda activate cc && uvicorn app.main:app --host 0.0.0.0 --port 9500"
-    start cmd /k "cd backend\app\modules\WhisperLive && conda activate cc && python3 run_server.py --port 9090 --backend faster_whisper"
     goto host_menu
 )
 if "%choice%"=="2b" (

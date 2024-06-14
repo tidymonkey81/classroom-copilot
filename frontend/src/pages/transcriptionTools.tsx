@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Button, TextField, Container, Box, Typography, Input } from '@mui/material';
-import { transcribeMP3, startStreaming, stopStreaming } from './services/transcribeService';
+import { transcribeMP3, startStreaming, stopStreaming, startWhisperLiveWebsocket, stopWhisperLiveWebsocket } from './services/transcribeService';
 
 function TranscriptionTools() {
   const [file, setFile] = useState<File | null>(null);
   const [backendUrl, setBackendUrl] = useState(`http://${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}`);
   const [transcript, setTranscript] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+  const [isWebSocketOpen, setIsWebSocketOpen] = useState(false);
 
   const handleTranscribeMP3 = () => {
     if (!file) {
@@ -23,6 +24,16 @@ function TranscriptionTools() {
     } else {
       startStreaming(setTranscript, backendUrl);
       setIsRecording(true);
+    }
+  };
+
+  const toggleWebSocket = () => {
+    if (isWebSocketOpen) {
+      stopWhisperLiveWebsocket();
+      setIsWebSocketOpen(false);
+    } else {
+      startWhisperLiveWebsocket(setTranscript, backendUrl);
+      setIsWebSocketOpen(true);
     }
   };
 
@@ -57,6 +68,9 @@ function TranscriptionTools() {
         />
         <Button variant="contained" color="secondary" onClick={toggleRecording}>
           {isRecording ? 'Stop Recording' : 'Start Recording'}
+        </Button>
+        <Button variant="contained" color="secondary" onClick={toggleWebSocket}>
+          {isWebSocketOpen ? 'Close WebSocket' : 'Open WebSocket'}
         </Button>
       </Box>
     </Container>

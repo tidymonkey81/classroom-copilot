@@ -1,10 +1,10 @@
 import os
 import logging
 from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from .routers.database import admin, calendar, curriculum, timetable, schools, department, teacher, student
-from .routers.transcribe import faster_whisper
+from .routers.transcribe import faster_whisper, whisper_live
 from .routers.llm import ollama, openai
 
 logging.basicConfig(level=logging.DEBUG)
@@ -34,7 +34,10 @@ app.include_router(student.router, prefix="/database/student", tags=["Student"])
 
 # Transcription Routes
 app.include_router(faster_whisper.router, prefix="/transcribe/local", tags=["Transcription"])
+app.include_router(whisper_live.router, prefix="/transcribe/live", tags=["Transcription"])
 
 # LLM Routes
 app.include_router(ollama.router, prefix="/llm", tags=["LLM"])
 app.include_router(openai.router, prefix="/llm", tags=["LLM"])
+
+

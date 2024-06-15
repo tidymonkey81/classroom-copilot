@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir /app
 WORKDIR /app
 
-COPY scripts/setup.sh requirements/server.txt /app
+COPY scripts/setup.sh requirements/server.txt /app/
 
 RUN apt update && bash setup.sh && rm setup.sh
 RUN pip install -r server.txt && rm server.txt
@@ -30,7 +30,9 @@ COPY whisper_live /app/whisper_live
 
 COPY run_server.py /app
 
-RUN ls -la /app/whisper_live
+EXPOSE 9090
+
+ENV CONTAINER=WHISPERLIVE
 
 CMD ["python3", "run_server.py", "--port", "9090", "--backend", "faster_whisper", "--faster_whisper_custom_model_path", "/app/whisper_live/models/faster-whisper-large-v3"]
 # CMD ["python3", "run_server.py", "--port", "9090", "--backend", "faster_whisper", "--faster_whisper_custom_model_path", "/app/whisper_live/models/faster-whisper-large-v3", "--omp_num_threads", "4", "--no_single_model"]

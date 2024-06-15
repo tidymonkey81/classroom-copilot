@@ -9,6 +9,7 @@ services:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     depends_on:
       - cc_backend
+      - cc_neo4j
       - cc_whisper
     networks:
       - app-network
@@ -28,6 +29,7 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
       - cc_neo4j
+      - cc_whisper
     networks:
       - app-network
   

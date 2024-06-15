@@ -29,3 +29,4 @@ async def websocket_endpoint(websocket: WebSocket):
     )
     await transcription_client.handle_connection()  # Adjusted method to handle the connection
     await websocket.close()
+

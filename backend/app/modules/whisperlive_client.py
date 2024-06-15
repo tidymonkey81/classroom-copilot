@@ -26,6 +26,8 @@ class Client:
         translate=False,
         model="small",
         srt_file_path="output.srt",
+        secure_websocket=False,
+        sslopt={},
         use_vad=True
     ):
         """
@@ -62,7 +64,8 @@ class Client:
         self.audio_bytes = None
 
         if host is not None and port is not None:
-            socket_url = f"ws://{host}:{port}"
+            socket_protocol = "wss" if secure_websocket else "ws"
+            socket_url = f"{socket_protocol}://{host}:{port}"
             self.client_socket = websocket.WebSocketApp(
                 socket_url,
                 on_open=lambda ws: self.on_open(ws),
@@ -79,7 +82,7 @@ class Client:
         Client.INSTANCES[self.uid] = self
 
         # start websocket client in a thread
-        self.ws_thread = threading.Thread(target=self.client_socket.run_forever)
+        self.ws_thread = threading.Thread(target=self.client_socket.run_forever, kwargs={"sslopt": sslopt})
         self.ws_thread.setDaemon(True)
         self.ws_thread.start()
 
@@ -641,12 +644,14 @@ class TranscriptionClient(TranscriptionTeeClient):
         lang=None,
         translate=False,
         model="small",
+        secure_websocket=False,
+        sslopt={},
         use_vad=True,
         save_output_recording=False,
         output_recording_filename="./output_recording.wav",
         output_transcription_path="./output.srt"
     ):
-        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad)
+        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt)
         if save_output_recording and not output_recording_filename.endswith(".wav"):
             raise ValueError(f"Please provide a valid `output_recording_filename`: {output_recording_filename}")
         if not output_transcription_path.endswith(".srt"):

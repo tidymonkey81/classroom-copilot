@@ -1,21 +1,25 @@
 import os
+import websockets
 import time
 import threading
 import json
 import functools
+
 import logging
-import torch
-import numpy as np
+logging.basicConfig(level = logging.INFO)
+
 from websockets.sync.server import serve
 from websockets.exceptions import ConnectionClosed
+
+import torch
+import numpy as np
+
 from whisper_live.vad import VoiceActivityDetector
 from whisper_live.transcriber import WhisperModel
 try:
     from whisper_live.transcriber_tensorrt import WhisperTRTLLM
 except Exception:
     pass
-
-logging.basicConfig(level=logging.INFO)
 
 
 class ClientManager:
@@ -158,6 +162,7 @@ class TranscriptionServer:
                 self.backend = "faster_whisper"
 
         if self.backend == "faster_whisper":
+            # validate custom model
             if faster_whisper_custom_model_path is not None and os.path.exists(faster_whisper_custom_model_path):
                 logging.info(f"Using custom model {faster_whisper_custom_model_path}")
                 options["model"] = faster_whisper_custom_model_path
@@ -292,7 +297,9 @@ class TranscriptionServer:
             faster_whisper_custom_model_path=None,
             whisper_tensorrt_path=None,
             trt_multilingual=False,
-            single_model=False):
+            single_model=False,
+            ssl_context=None
+        ):
         """
         Run the transcription server.
 
@@ -320,7 +327,8 @@ class TranscriptionServer:
                 trt_multilingual=trt_multilingual
             ),
             host,
-            port
+            port,
+            ssl_context=ssl_context
         ) as server:
             server.serve_forever()
 

@@ -7,9 +7,9 @@ src="https://img.youtube.com/vi/0PHWCApIcCI/0.jpg" style="background-color:rgba(
 <br><br>
 </h2>
 
-This project is a real-time transcription application that uses the OpenAI Whisper model
-to convert speech input into text output. It can be used to transcribe both live audio
-input from microphone and pre-recorded audio files.
+This project is a real-time transcription application that uses the OpenAI Whisper model to convert speech input into text output. It can be used to transcribe both live audio input from microphone and pre-recorded audio files.
+
+Unlike traditional speech recognition systems that rely on continuous audio streaming, we use [voice activity detection (VAD)](https://github.com/snakers4/silero-vad) to detect the presence of speech and only send the audio data to whisper when speech is detected. This helps to reduce the amount of data sent to the whisper model and improves the accuracy of the transcription output.
 
 ## Installation
 - Install PyAudio and ffmpeg
@@ -77,6 +77,8 @@ If you don't want this, set `--no_single_model`.
   - `use_vad`: Whether to use `Voice Activity Detection` on the server.
   - `save_output_recording`: Set to True to save the microphone input as a `.wav` file during live transcription. This option is helpful for recording sessions for later playback or analysis. Defaults to `False`. 
   - `output_recording_filename`: Specifies the `.wav` file path where the microphone input will be saved if `save_output_recording` is set to `True`.
+  - `secure_websocket`: Set to `True` to create a secure websocket connection
+  - `sslopt`: TODO
 ```python
 from whisper_live.client import TranscriptionClient
 client = TranscriptionClient(
@@ -87,20 +89,45 @@ client = TranscriptionClient(
   model="small",
   use_vad=False,
   save_output_recording=True,                         # Only used for microphone input, False by Default
-  output_recording_filename="./output_recording.wav"  # Only used for microphone input
+  output_recording_filename="./output_recording.wav",  # Only used for microphone input
+  secure_websocket=False,
+  sslopt={},
 )
-```
-It connects to the server running on localhost at port 9090. Using a multilingual model, language for the transcription will be automatically detected. You can also use the language option to specify the target language for the transcription, in this case, English ("en"). The translate option should be set to `True` if we want to translate from the source language to English and `False` if we want to transcribe in the source language.
 
-- Transcribe an audio file:
-```python
 client("tests/jfk.wav")
 ```
+It connects to the server running on localhost at port 9090. Using a multilingual model, language for the transcription will be automatically detected. You can also use the language option to specify the target language for the transcription, in this case, English ("en"). The translate option should be set to `True` if we want to translate from the source language to English and `False` if we want to transcribe in the source language.
+- Transcribe an audio file with ssl:
+```python
+from whisper_live.client import TranscriptionClient
+client = TranscriptionClient(
+  "localhost",
+  9090,
+  lang="en",
+  translate=False,
+  model="small",
+  secure_websocket=True,
+  sslopt={"ca_certs": "cert.pem"},
+)
+client("tests/jfk.wav")
+```
+This command transcribes the specified audio file (audio.wav) using the Whisper model. It connects to the server running on localhost at port 9090. Using a multilingual model, language for the transcription will be automatically detected. You can also use the language option to specify the target language for the transcription, in this case, English ("en"). The translate option should be set to `True` if we want to translate from the source language to English and `False` if we want to transcribe in the source language.
 
 - To transcribe from microphone:
 ```python
+from whisper_live.client import TranscriptionClient
+client = TranscriptionClient(
+  "localhost",
+  9090,
+  lang="hi",
+  translate=True,
+  model="small",
+  secure_websocket=False,
+  sslopt={},
+)
 client()
 ```
+This command captures audio from the microphone and sends it to the server for transcription. It uses the multilingual model with `hi` as the selected language. We use whisper `small` by default but can be changed to any other option based on the requirements and the hardware running the server.
 
 - To transcribe from a RTSP stream:
 ```python
@@ -109,36 +136,35 @@ client(rtsp_url="rtsp://admin:admin@192.168.0.1/rtsp")
 
 - To transcribe from a HLS stream:
 ```python
-client(hls_url="http://as-hls-ww-live.akamaized.net/pool_904/live/ww/bbc_1xtra/bbc_1xtra.isml/bbc_1xtra-audio%3d96000.norewind.m3u8")
+from whisper_live.client import TranscriptionClient
+client = TranscriptionClient(host, port, lang="en", translate=False) 
+client(hls_url="http://as-hls-ww-live.akamaized.net/pool_904/live/ww/bbc_1xtra/bbc_1xtra.isml/bbc_1xtra-audio%3d96000.norewind.m3u8") 
 ```
+This command streams audio into the server from a HLS stream. It uses the same options as the previous command, using the multilingual model and specifying the target language and task.
 
-## Browser Extensions
-- Run the server with your desired backend as shown [here](https://github.com/collabora/WhisperLive?tab=readme-ov-file#running-the-server).
-- Transcribe audio directly from your browser using our Chrome or Firefox extensions. Refer to [Audio-Transcription-Chrome](https://github.com/collabora/whisper-live/tree/main/Audio-Transcription-Chrome#readme) and [Audio-Transcription-Firefox](https://github.com/collabora/whisper-live/tree/main/Audio-Transcription-Firefox#readme) for setup instructions.
+## Transcribe audio from browser
+- Run the server with your desired backend as shown [here](https://github.com/collabora/WhisperLive?tab=readme-ov-file#running-the-server)
+
+### Chrome Extension
+- Refer to [Audio-Transcription-Chrome](https://github.com/collabora/whisper-live/tree/main/Audio-Transcription-Chrome#readme) to use Chrome extension.
+
+### Firefox Extension
+- Refer to [Audio-Transcription-Firefox](https://github.com/collabora/whisper-live/tree/main/Audio-Transcription-Firefox#readme) to use Mozilla Firefox extension.
 
 ## Whisper Live Server in Docker
 - GPU
   - Faster-Whisper
   ```bash
-  docker run -it --gpus all -p 9090:9090 ghcr.io/collabora/whisperlive-gpu:latest
+  docker build . -t whisper-live -f docker/Dockerfile.gpu
+  docker run -it --gpus all -p 9090:9090 whisper-live:latest
   ```
 
-  - TensorRT. 
-  ```bash
-  docker run -p 9090:9090 --runtime=nvidia --gpus all --entrypoint /bin/bash -it ghcr.io/collabora/whisperlive-tensorrt
-
-  # Build tiny.en engine
-  bash build_whisper_tensorrt.sh /app/TensorRT-LLM-examples small.en
-
-  # Run server with tiny.en
-  python3 run_server.py --port 9090 \
-                        --backend tensorrt \
-                        --trt_model_path "/app/TensorRT-LLM-examples/whisper/whisper_small_en"
-  ```
+  - TensorRT. Follow [TensorRT_whisper readme](https://github.com/collabora/WhisperLive/blob/main/TensorRT_whisper.md) in order to setup docker and use TensorRT backend. We provide a pre-built docker image which has TensorRT-LLM built and ready to use.
 
 - CPU
 ```bash
-docker run -it -p 9090:9090 ghcr.io/collabora/whisperlive-cpu:latest
+docker build . -t whisper-live -f docker/Dockerfile.cpu
+docker run -it -p 9090:9090 whisper-live:latest
 ```
 **Note**: By default we use "small" model size. To build docker image for a different model size, change the size in server.py and then build the docker image.
 
@@ -169,5 +195,6 @@ We are available to help you with both Open Source and proprietary AI projects. 
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/snakers4/silero-vad}},
+  commit = {insert_some_commit_here},
   email = {hello@silero.ai}
 }

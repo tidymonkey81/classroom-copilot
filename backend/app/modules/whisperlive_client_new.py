@@ -34,6 +34,26 @@ class Client:
         srt_file_path="output.srt",
         use_vad=True
     ):
+        self.recording = False
+        self.task = "transcribe"
+        self.uid = str(uuid.uuid4())
+        self.waiting = False
+        self.last_response_received = None
+        self.disconnect_if_no_response_for = 15
+        self.language = lang
+        self.model = model
+        self.server_error = False
+        self.srt_file_path = srt_file_path
+        self.use_vad = use_vad
+        self.last_segment = None
+        self.last_received_segment = None
+
+        if translate:
+            self.task = "translate"
+
+        self.timestamp_offset = 0.0
+        self.audio_bytes = None
+        
         if ws is None:
             """
             Initializes a Client instance for audio recording and streaming to a server.
@@ -48,26 +68,6 @@ class Client:
                 lang (str, optional): The selected language for transcription. Default is None.
                 translate (bool, optional): Specifies if the task is translation. Default is False.
             """
-            self.recording = False
-            self.task = "transcribe"
-            self.uid = str(uuid.uuid4())
-            self.waiting = False
-            self.last_response_received = None
-            self.disconnect_if_no_response_for = 15
-            self.language = lang
-            self.model = model
-            self.server_error = False
-            self.srt_file_path = srt_file_path
-            self.use_vad = use_vad
-            self.last_segment = None
-            self.last_received_segment = None
-
-            if translate:
-                self.task = "translate"
-
-            self.timestamp_offset = 0.0
-            self.audio_bytes = None
-
             if host is not None and port is not None:
                 socket_url = f"ws://{host}:{port}"
                 self.client_socket = websocket.WebSocketApp(
@@ -93,7 +93,27 @@ class Client:
             self.transcript = []
             print("[INFO]: * recording")
         else:
-            self.client_socket = ws
+            """
+            Initializes a Client instance for audio recording and streaming to a server using an existing WebSocket connection.
+
+            When translate is True, the task will be set to "translate" instead of "transcribe".
+            he audio recording starts immediately upon initialization.
+
+            Args:
+                ws (websocket.WebSocketApp): The WebSocket client instance.
+                lang (str, optional): The selected language for transcription. Default is None.
+                translate (bool, optional): Specifies if the task is translation. Default is False.
+            """
+
+            Client.INSTANCES[self.uid] = self
+
+            # start websocket client in a thread
+            self.ws_thread = threading.Thread(target=self.client_socket.run_forever) # TODO: Modify this line to pass the WebSocket connection to the Client instance (the run_forever method is not defined in the WebSocketApp class)
+            self.ws_thread.setDaemon(True)
+            self.ws_thread.start()
+
+            self.transcript = []
+            print("[INFO]: * recording from frontend")
 
     def handle_status_messages(self, message_data):
         """Handles server status messages."""
@@ -645,6 +665,7 @@ class TranscriptionClient(TranscriptionTeeClient):
     """
     def __init__(
         self,
+        ws,
         host,
         port,
         lang=None,
@@ -655,7 +676,12 @@ class TranscriptionClient(TranscriptionTeeClient):
         output_recording_filename="./output_recording.wav",
         output_transcription_path="./output.srt"
     ):
-        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad)
+        if ws:
+            print("Using existing websocket to create client")
+            self.client = Client(ws, host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad)
+        else:
+            print("Creating new websocket to pass to new client")
+            self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad)
         if save_output_recording and not output_recording_filename.endswith(".wav"):
             raise ValueError(f"Please provide a valid `output_recording_filename`: {output_recording_filename}")
         if not output_transcription_path.endswith(".srt"):

@@ -28,9 +28,9 @@ RUN pip install -r server.txt && rm server.txt
 
 COPY whisper_live /app/whisper_live
 
-COPY run_server.py /app
-
 EXPOSE 9090
+
+COPY run_server.py /app
 
 ENV CONTAINER=WHISPERLIVE
 

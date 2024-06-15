@@ -1,4 +1,4 @@
-from modules.whisperlive_client_new import TranscriptionClient
+from modules.whisperlive_client import TranscriptionClient
 import os
 import time
 
@@ -18,8 +18,8 @@ def main():
     user_transcript_dir = setup_directories(user_dir, user_id)
 
     client = TranscriptionClient(
-        "localhost",
-        9090,
+        "172.30.123.200",
+        "9090",
         lang="en",
         translate=False,
         use_vad=True,

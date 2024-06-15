@@ -9,11 +9,7 @@ import json
 import websocket
 import uuid
 import time
-import ffmpeg
-if os.getenv('CONTAINER') == 'WHISPERLIVE':
-    import whisper_live.utils as utils
-else:
-    import modules.WhisperLive.whisper_live.utils as utils
+import modules.WhisperLive.whisper_live.utils as utils
 
 class Client:
     """

@@ -32,7 +32,10 @@ EXPOSE 9090
 
 COPY run_server.py /app
 
-ENV CONTAINER=WHISPERLIVE
+ARG WHISPERLIVE_PORT
+ENV WHISPERLIVE_PORT=${WHISPERLIVE_PORT}
 
-CMD ["python3", "run_server.py", "--port", "9090", "--backend", "faster_whisper", "--faster_whisper_custom_model_path", "/app/whisper_live/models/faster-whisper-large-v3"]
-# CMD ["python3", "run_server.py", "--port", "9090", "--backend", "faster_whisper", "--faster_whisper_custom_model_path", "/app/whisper_live/models/faster-whisper-large-v3", "--omp_num_threads", "4", "--no_single_model"]
+ARG FASTERWHISPER_MODEL
+ENV FASTERWHISPER_MODEL=${FASTERWHISPER_MODEL}
+
+CMD python3 run_server.py --port $WHISPERLIVE_PORT --backend faster_whisper --faster_whisper_custom_model_path /app/whisper_live/models/$FASTERWHISPER_MODEL

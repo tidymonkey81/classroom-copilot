@@ -2,6 +2,12 @@ from modules.whisperlive_client import TranscriptionClient
 import os
 import time
 
+from dotenv import load_dotenv
+load_dotenv()
+
+host = os.environ["WHISPERLIVE_HOST"]
+port = os.environ["WHISPERLIVE_PORT"]
+
 def setup_directories(user_dir, user_id):
     user_transcript_dir = f"{user_dir}/{user_id}/transcripts"
     if not os.path.exists(user_transcript_dir):
@@ -18,8 +24,8 @@ def main():
     user_transcript_dir = setup_directories(user_dir, user_id)
 
     client = TranscriptionClient(
-        "172.30.123.200",
-        "9090",
+        host,
+        port,
         lang="en",
         translate=False,
         use_vad=True,

@@ -35,16 +35,18 @@ services:
   
   cc_whisper:
     container_name: cc_whisper
-    network_mode: "bridge"
     build:
       context: ./backend/app/modules/WhisperLive
+      args:
+        WHISPERLIVE_PORT: ${WHISPERLIVE_PORT}
     env_file:
         - ./.env
+    environment:
+      WHISPERLIVE_PORT: ${WHISPERLIVE_PORT}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
     volumes:
       - data_volume:/data
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     deploy:
       resources:
         reservations:
@@ -53,7 +55,7 @@ services:
               count: 1
               capabilities: [gpu]
     ports:
-      - 9090:9090
+      - ${WHISPERLIVE_PORT}:${WHISPERLIVE_PORT}
     networks:
       - app-network
 

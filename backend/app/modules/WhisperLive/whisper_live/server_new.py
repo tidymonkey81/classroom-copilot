@@ -202,7 +202,7 @@ class TranscriptionServer:
                 websocket.close()
                 return False  # Indicates that the connection should not continue
 
-            if self.backend == "tensorrt" or self.use_vad:
+            if self.backend == "tensorrt":
                 self.vad_detector = VoiceActivityDetector(frame_rate=self.RATE)
             self.initialize_client(websocket, options, faster_whisper_custom_model_path,
                                    whisper_tensorrt_path, trt_multilingual)
@@ -225,7 +225,7 @@ class TranscriptionServer:
                 client.set_eos(True)
             return False
 
-        if self.backend == "tensorrt" or self.use_vad:
+        if self.backend == "tensorrt":
             voice_active = self.voice_activity(websocket, frame_np)
             if voice_active:
                 self.no_voice_activity_chunks = 0
@@ -349,7 +349,6 @@ class TranscriptionServer:
             if self.no_voice_activity_chunks > 3:
                 client = self.client_manager.get_client(websocket)
                 if not client.eos:
-                    logging.info("No voice activity detected. Setting EOS flag.")
                     client.set_eos(True)
                 time.sleep(0.1)    # Sleep 100m; wait some voice activity.
             return False
@@ -516,7 +515,6 @@ class ServeClientBase(object):
                 json.dumps({
                     "uid": self.client_uid,
                     "segments": segments,
-                    "is_final": self.eos
                 })
             )
         except Exception as e:

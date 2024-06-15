@@ -30,4 +30,7 @@ COPY whisper_live /app/whisper_live
 
 COPY run_server.py /app
 
-CMD ["python3", "run_server.py"]
+RUN ls -la /app/whisper_live
+
+CMD ["python3", "run_server.py", "--port", "9090", "--backend", "faster_whisper", "--faster_whisper_custom_model_path", "/app/whisper_live/models/faster-whisper-large-v3"]
+# CMD ["python3", "run_server.py", "--port", "9090", "--backend", "faster_whisper", "--faster_whisper_custom_model_path", "/app/whisper_live/models/faster-whisper-large-v3", "--omp_num_threads", "4", "--no_single_model"]

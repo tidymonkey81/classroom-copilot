@@ -55,8 +55,6 @@ class Client:
         self.use_vad = use_vad
         self.last_segment = None
         self.last_received_segment = None
-        self.callback = callback if callback is not None else Client.default_callback
-        # self.eos = None
 
         if translate:
             self.task = "translate"
@@ -260,6 +258,7 @@ class Client:
         assert self.last_response_received
         while time.time() - self.last_response_received < self.disconnect_if_no_response_for:
             continue
+
 
 class TranscriptionTeeClient:
     """
@@ -624,6 +623,7 @@ class TranscriptionClient(TranscriptionTeeClient):
         translate (bool, optional): Indicates whether translation tasks are required (default is False).
         save_output_recording (bool, optional): Indicates whether to save recording from microphone.
         output_recording_filename (str, optional): File to save the output recording.
+        output_transcription_path (str, optional): File to save the output transcription.
 
     Attributes:
         client (Client): An instance of the underlying Client class responsible for handling the WebSocket connection.
@@ -645,7 +645,7 @@ class TranscriptionClient(TranscriptionTeeClient):
         use_vad=True,
         save_output_recording=False,
         output_recording_filename="./output_recording.wav",
-        output_transcription_path="./output.srt",
+        output_transcription_path="./output.srt"
     ):
         self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad)
         if save_output_recording and not output_recording_filename.endswith(".wav"):

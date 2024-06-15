@@ -1,3 +1,0 @@
-[submodule "backend/app/modules/WhisperLive"]
-	path = backend/app/modules/WhisperLive
-	url = https://github.com/tidymonkey81/WhisperLive

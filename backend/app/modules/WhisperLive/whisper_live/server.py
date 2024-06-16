@@ -353,11 +353,15 @@ class TranscriptionServer:
                 end-of-speech (EOS) flag for the client.
         """
         if not self.vad_detector(frame_np):
+            logging.info("[INFO]: No voice activity detected")
             self.no_voice_activity_chunks += 1
             if self.no_voice_activity_chunks > 3:
                 client = self.client_manager.get_client(websocket)
                 if not client.eos:
+                    logging.info("[INFO]: EOS: True finally it happened to me")
                     client.set_eos(True)
+                else:
+                    logging.info("[INFO]: EOS: False and never seemed to get it")
                 time.sleep(0.1)    # Sleep 100m; wait some voice activity.
             return False
         return True
@@ -395,6 +399,7 @@ class ServeClientBase(object):
         self.add_pause_thresh = 3       # add a blank to segment list as a pause(no speech) for 3 seconds
         self.transcript = []
         self.send_last_n_segments = 10
+        self.eos = False
 
         # text formatting
         self.pick_previous_segments = 2
@@ -519,11 +524,13 @@ class ServeClientBase(object):
             segments (list): A list of transcription segments to be sent to the client.
         """
         try:
-            self.websocket.send(
-                json.dumps({
+            json_packet = json.dumps({
                     "uid": self.client_uid,
                     "segments": segments,
+                    "eos": self.eos  # Send the eos flag as part of the WebSocket message
                 })
+            self.websocket.send(
+                json_packet
             )
         except Exception as e:
             logging.error(f"[ERROR]: Sending data to client: {e}")
@@ -579,7 +586,7 @@ class ServeClientTensorRT(ServeClientBase):
         super().__init__(client_uid, websocket)
         self.language = language if multilingual else "en"
         self.task = task
-        self.eos = False
+        self.eos = None
 
         if single_model:
             if ServeClientTensorRT.SINGLE_MODEL is None:
@@ -764,6 +771,8 @@ class ServeClientFasterWhisper(ServeClientBase):
         self.initial_prompt = initial_prompt
         self.vad_parameters = vad_parameters or {"threshold": 0.5}
         self.no_speech_thresh = 0.45
+        
+        self.eos = None
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -970,7 +979,7 @@ class ServeClientFasterWhisper(ServeClientBase):
                 logging.error(f"[ERROR]: Failed to transcribe audio chunk: {e}")
                 time.sleep(0.01)
 
-    def format_segment(self, start, end, text):
+    def format_segment(self, start, end, text, eos=None):
         """
         Formats a transcription segment with precise start and end times alongside the transcribed text.
 
@@ -978,17 +987,21 @@ class ServeClientFasterWhisper(ServeClientBase):
             start (float): The start time of the transcription segment in seconds.
             end (float): The end time of the transcription segment in seconds.
             text (str): The transcribed text corresponding to the segment.
+            eos (bool): Whether the segment is the last one in the transcription.
 
         Returns:
             dict: A dictionary representing the formatted transcription segment, including
                 'start' and 'end' times as strings with three decimal places and the 'text'
                 of the transcription.
         """
-        return {
+        segment = {
             'start': "{:.3f}".format(start),
             'end': "{:.3f}".format(end),
             'text': text
-        }
+            }
+        if eos is not None:
+            segment['eos'] = eos
+        return segment
 
     def update_segments(self, segments, duration):
         """
@@ -1040,16 +1053,20 @@ class ServeClientFasterWhisper(ServeClientBase):
         if self.current_out.strip() == self.prev_out.strip() and self.current_out != '':
             self.same_output_threshold += 1
         else:
+            self.eos = False
             self.same_output_threshold = 0
 
         if self.same_output_threshold > 5:
             if not len(self.text) or self.text[-1].strip().lower() != self.current_out.strip().lower():
+                self.eos = True
                 self.text.append(self.current_out)
-                self.transcript.append(self.format_segment(
+                logging.info("[INFO]: EOS: Detected utterance: %s", self.current_out)
+                segment_data = self.format_segment(
                     self.timestamp_offset,
                     self.timestamp_offset + duration,
                     self.current_out
-                ))
+                )
+                self.transcript.append(segment_data)
             self.current_out = ''
             offset = duration
             self.same_output_threshold = 0

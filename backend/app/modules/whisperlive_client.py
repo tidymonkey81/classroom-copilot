@@ -11,6 +11,10 @@ import uuid
 import time
 import modules.WhisperLive.whisper_live.utils as utils
 
+import queue
+
+import logging
+
 class Client:
     """
     Handles communication with a server using WebSocket.
@@ -28,7 +32,10 @@ class Client:
         srt_file_path="output.srt",
         secure_websocket=False,
         sslopt={},
-        use_vad=True
+        use_vad=True,
+        transcription_queue=None,
+        callback=None,
+        eos=None
     ):
         """
         Initializes a Client instance for audio recording and streaming to a server.
@@ -56,6 +63,9 @@ class Client:
         self.use_vad = use_vad
         self.last_segment = None
         self.last_received_segment = None
+        self.callback = callback
+        self.transcription_queue = transcription_queue or queue.Queue()
+        self.eos = eos
 
         if translate:
             self.task = "translate"
@@ -117,11 +127,13 @@ class Client:
         if self.last_received_segment is None or self.last_received_segment != segments[-1]["text"]:
             self.last_response_received = time.time()
             self.last_received_segment = segments[-1]["text"]
+            if self.callback:
+                self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos)  # Call the callback with the last segment text and EOS flag
 
         # Truncate to last 3 entries for brevity.
-        text = text[-3:]
-        utils.clear_screen()
-        utils.print_transcript(text)
+        # text = text[-3:]
+        # utils.clear_screen()
+        # utils.print_transcript(text)
 
     def on_message(self, ws, message):
         """
@@ -138,6 +150,8 @@ class Client:
         """
         message = json.loads(message)
 
+        logging.info("[INFO]: Received message: %s", message)
+        
         if self.uid != message.get("uid"):
             print("[ERROR]: invalid client uid")
             return
@@ -165,8 +179,14 @@ class Client:
             )
             return
 
-        if "segments" in message.keys():
-            self.process_segments(message["segments"])
+        # if "segments" in message.keys():
+            # Print the segments
+            # self.process_segments(message["segments"])
+                    
+        if "eos" in message.keys():
+            self.eos = message["eos"]
+            if self.eos is True:
+                self.process_segments(message["segments"])
 
     def on_error(self, ws, error):
         print(f"[ERROR] WebSocket Error: {error}")
@@ -647,11 +667,12 @@ class TranscriptionClient(TranscriptionTeeClient):
         secure_websocket=False,
         sslopt={},
         use_vad=True,
+        callback=None,
         save_output_recording=False,
         output_recording_filename="./output_recording.wav",
         output_transcription_path="./output.srt"
     ):
-        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt)
+        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt, callback=callback)
         if save_output_recording and not output_recording_filename.endswith(".wav"):
             raise ValueError(f"Please provide a valid `output_recording_filename`: {output_recording_filename}")
         if not output_transcription_path.endswith(".srt"):

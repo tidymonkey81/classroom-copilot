@@ -9,6 +9,7 @@ const Header = () => (
             <Link to="/transcription-tools" className="mr-4">Transcription Tools</Link>
             <Link to="/flow" className="mr-4">Flow</Link>
             <Link to="/draw" className="mr-4">Draw</Link>
+            <Link to="/test" className="mr-4">Test</Link>
         </nav>
     </header>
 );

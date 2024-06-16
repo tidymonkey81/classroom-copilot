@@ -30,10 +30,15 @@ dist-ssr
 # Secrets
 .env
 
-# Data directories
-data_local/.archive/
-data_local/schools/
+# App files
+*.srt
+*.wav
+
+# Data 
+data/*
+
+# Model directories
+backend/app/modules/WhisperLive/whisper_live/models/*
 
 # Other
 .archive/*
-test*.*

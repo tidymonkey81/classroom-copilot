@@ -1,43 +1,52 @@
 services:
   cc_frontend:
+    container_name: cc_frontend
     build:
       context: ./frontend
     env_file:
       - ./.env
-    container_name: cc_frontend
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     depends_on:
       - cc_backend
+      - cc_neo4j
       - cc_whisper
     networks:
       - app-network
     volumes:
-      - data_volume:/data_local
+      - data_volume:/data
 
   cc_backend:
+    container_name: cc_backend
     build:
       context: ./backend
     env_file:
         - ./.env
-    container_name: cc_backend
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - data_volume:/data_local
+      - data_volume:/data
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
       - cc_neo4j
+      - cc_whisper
     networks:
       - app-network
   
   cc_whisper:
+    container_name: cc_whisper
     build:
       context: ./backend/app/modules/WhisperLive
-    container_name: cc_whisper
+      args:
+        WHISPERLIVE_PORT: ${WHISPERLIVE_PORT}
+    env_file:
+        - ./.env
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      WHISPERLIVE_PORT: ${WHISPERLIVE_PORT}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    volumes:
+      - data_volume:/data
     deploy:
       resources:
         reservations:
@@ -46,7 +55,7 @@ services:
               count: 1
               capabilities: [gpu]
     ports:
-      - "${WHISPER_PORT}:${WHISPER_PORT}"
+      - ${WHISPERLIVE_PORT}:${WHISPERLIVE_PORT}
     networks:
       - app-network
 

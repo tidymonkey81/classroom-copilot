@@ -296,6 +296,7 @@ class TranscriptionTeeClient:
         clients (list): the underlying Client instances responsible for handling WebSocket connections.
     """
     def __init__(self, clients, save_output_recording=False, output_recording_filename="./output_recording.wav"):
+        self.uid = str(uuid.uuid4())
         self.clients = clients
         if not self.clients:
             raise Exception("At least one client is required.")
@@ -514,9 +515,10 @@ class TranscriptionTeeClient:
         """
         n_audio_file = 0
         if self.save_output_recording:
-            if os.path.exists("chunks"):
-                shutil.rmtree("chunks")
-            os.makedirs("chunks")
+            if os.path.exists(f"temp/{self.uid}/chunks"):
+                shutil.rmtree(f"temp/{self.uid}/chunks")
+                shutil.rmtree(f"temp/{self.uid}")
+            os.makedirs(f"temp/{self.uid}/chunks")
         try:
             for _ in range(0, int(self.rate / self.chunk * self.record_seconds)):
                 if not any(client.recording for client in self.clients):
@@ -535,7 +537,7 @@ class TranscriptionTeeClient:
                             target=self.write_audio_frames_to_file,
                             args=(
                                 self.frames[:],
-                                f"chunks/{n_audio_file}.wav",
+                                f"temp/{self.uid}/chunks/{n_audio_file}.wav",
                             ),
                         )
                         t.start()
@@ -546,7 +548,7 @@ class TranscriptionTeeClient:
         except KeyboardInterrupt:
             if self.save_output_recording and len(self.frames):
                 self.write_audio_frames_to_file(
-                    self.frames[:], f"chunks/{n_audio_file}.wav"
+                    self.frames[:], f"temp/{self.uid}/chunks/{n_audio_file}.wav"
                 )
                 n_audio_file += 1
             self.stream.stop_stream()
@@ -569,8 +571,8 @@ class TranscriptionTeeClient:
             file_name (str): The name of the WAV file to which the frames will be written.
 
         """
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)  # Ensure directory exists
         with wave.open(file_name, "wb") as wavfile:
-            wavfile: wave.Wave_write
             wavfile.setnchannels(self.channels)
             wavfile.setsampwidth(2)
             wavfile.setframerate(self.rate)
@@ -591,10 +593,10 @@ class TranscriptionTeeClient:
 
         """
         input_files = [
-            f"chunks/{i}.wav"
-            for i in range(n_audio_file)
-            if os.path.exists(f"chunks/{i}.wav")
-        ]
+                f"temp/{self.uid}/chunks/{i}.wav"
+                for i in range(n_audio_file)
+                if os.path.exists(f"temp/{self.uid}/chunks/{i}.wav")
+            ]
         with wave.open(self.output_recording_filename, "wb") as wavfile:
             wavfile: wave.Wave_write
             wavfile.setnchannels(self.channels)
@@ -611,8 +613,9 @@ class TranscriptionTeeClient:
                 os.remove(in_file)
         wavfile.close()
         # clean up temporary directory to store chunks
-        if os.path.exists("chunks"):
-            shutil.rmtree("chunks")
+        if os.path.exists(f"temp/{self.uid}/chunks"):
+            shutil.rmtree(f"temp/{self.uid}/chunks")
+            shutil.rmtree(f"temp/{self.uid}")
 
     @staticmethod
     def bytes_to_float_array(audio_bytes):

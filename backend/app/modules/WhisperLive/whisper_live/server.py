@@ -1060,7 +1060,7 @@ class ServeClientFasterWhisper(ServeClientBase):
             if not len(self.text) or self.text[-1].strip().lower() != self.current_out.strip().lower():
                 self.eos = True
                 self.text.append(self.current_out)
-                logging.info("[INFO]: EOS: Detected utterance: %s", self.current_out)
+                logging.info("[INFO]: Detected utterance: %s", self.current_out)
                 segment_data = self.format_segment(
                     self.timestamp_offset,
                     self.timestamp_offset + duration,

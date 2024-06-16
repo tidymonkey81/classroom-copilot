@@ -9,6 +9,7 @@ import LLMTools from './src/pages/llmTools';
 import TranscriptionTools from './src/pages/transcriptionTools';
 import Flow from './src/pages/flowPage';
 import Draw from './src/pages/drawPage';
+import TranscriptionClient from './src/pages/testPage';
 import LabsPage from './src/pages/labsPage';
 import NotFound from './src/pages/Nav/NotFound';
 import { CopilotKit } from "@copilotkit/react-core";
@@ -40,6 +41,7 @@ export function App() {
       <Route path="/transcription-tools" element={<PrivateRoute roles={['admin', 'superuser']}><TranscriptionTools /></PrivateRoute>} />
       <Route path="/flow" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><Flow /></PrivateRoute>} />
       <Route path="/draw" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><Draw /></PrivateRoute>} />
+      <Route path="/test" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><TranscriptionClient host="192.168.0.20" port={9090} /></PrivateRoute>} />
       <Route path="*" element={<NotFound />} />
       <Route path="/labs/" element={<PrivateRoute roles={['admin', 'superuser', 'teacher']}><LabsPage /></PrivateRoute>} />
     </Routes>

@@ -22,9 +22,11 @@ An AI copilot for learners and educators.
   - [Contact](#contact)
 
 ## Project Overview
+
 Classroom Copilot is an AI-driven application designed to assist both learners and educators by providing various tools and features to enhance the educational experience. The project leverages modern web technologies and AI to deliver a seamless and interactive user experience.
 
 ## Tech Stack
+
 - **Frontend:** React, TypeScript, Vite, React Router, Emotion, MUI, ReactFlow, Tldraw
 - **Backend:** FastAPI, Python, Neo4j, Pandas
 - **Testing:** Vitest, Testing Library
@@ -33,21 +35,23 @@ Classroom Copilot is an AI-driven application designed to assist both learners a
 ## Installation
 
 ### Prerequisites
+
 - Node.js
 - Docker
 - WhisperLive
 - Ollama
-- 
 
 #### WhisperLive
- - [WhisperLive GitHub repo](https://github.com/collabora/WhisperLive)
- - [Installing the NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+
+- [WhisperLive GitHub repo](https://github.com/collabora/WhisperLive)
+- [Installing the NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 
 ## User Authentication and Role Management
 
 To set up user authentication and manage user roles and permissions, follow these guidelines:
 
 ### Setting up Firebase Authentication
+
 1. Go to the [Firebase Console](https://console.firebase.google.com/).
 2. Create a new project or select an existing one.
 3. Navigate to the "Authentication" section and enable the sign-in methods you want to use (e.g., email/password, Google, Facebook).
@@ -55,6 +59,7 @@ To set up user authentication and manage user roles and permissions, follow thes
 5. Initialize Firebase in your application with your project's credentials. You can find the necessary configuration in your Firebase project settings.
 
 ### Managing User Roles and Permissions
+
 1. Use the React Context API to manage user state across your application.
 2. Create a context that holds the user's authentication state and role.
 3. On user login, fetch the user's role from your database and store it in the context.
@@ -63,6 +68,7 @@ To set up user authentication and manage user roles and permissions, follow thes
 ## Roadmap
 
 ### Current Development Phase
+
 - [ ] **Neo4J Graph Database**
   - Provides semantic search capabilities using CYPHER queries on rich connected data stored in a graph database.
   - Data stored in the Neo4J database:
@@ -143,6 +149,7 @@ To set up user authentication and manage user roles and permissions, follow thes
     - [ ] Route users to personal pages
 
 ### Future Plans
+
 - [ ] **Real-Time Collaboration**
   - Develop features for real-time document editing.
 
@@ -156,6 +163,7 @@ To set up user authentication and manage user roles and permissions, follow thes
   - Implement gamification features to increase user engagement.
 
 ## Contributing
+
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-branch`).
 3. Commit your changes (`git commit -m 'Add new feature'`).
@@ -163,7 +171,9 @@ To set up user authentication and manage user roles and permissions, follow thes
 5. Open a Pull Request.
 
 ## License
+
 This project is licensed under a KevlarAI license.
 
 ## Contact
-For any inquiries, please contact [kcar@kevlarai.com](mailto:kcar@kevlarai.com).
+
+For any inquiries, please contact [kcar@kevlarai.com](mailto:kcar@kevlarai.com)

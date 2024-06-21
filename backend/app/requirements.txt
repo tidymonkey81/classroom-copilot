@@ -9,3 +9,4 @@ faster-whisper
 ollama
 openai
 websockets
+neontology

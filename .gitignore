@@ -41,4 +41,5 @@ data/*
 backend/app/modules/WhisperLive/whisper_live/models/*
 
 # Other
+backend/app/temp/*
 .archive/*

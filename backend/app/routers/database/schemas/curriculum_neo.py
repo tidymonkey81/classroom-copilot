@@ -2,7 +2,7 @@ from typing import ClassVar
 from neontology import BaseNode
 
 # Neo4j Nodes and relationships using Neontology
-# Curricular layer
+# Curriculum layer
 
 class KeyStageNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'KeyStage'

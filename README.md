@@ -23,7 +23,7 @@ An AI copilot for learners and educators.
 
 ## Project Overview
 
-Classroom Copilot is an AI-driven application designed to assist both learners and educators by providing various tools and features to enhance the educational experience. The project leverages modern web technologies and AI to deliver a seamless and interactive user experience.
+plan/teach/journal/learn
 
 ## Tech Stack
 

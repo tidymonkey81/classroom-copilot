@@ -65,6 +65,18 @@ To set up user authentication and manage user roles and permissions, follow thes
 3. On user login, fetch the user's role from your database and store it in the context.
 4. Use React Router to create protected routes that check the user's role before rendering the appropriate dashboard or redirecting to a login page.
 
+## Dash Frontend Application
+
+To set up and run the Dash frontend application for managing Neo4j database instances, follow these steps:
+
+1. Ensure you have Python installed on your system.
+2. Navigate to the `dash_frontend` directory within the project.
+3. Install the required Python packages by running `pip install -r requirements.txt`.
+4. Run the Dash app by executing `python app.py`.
+5. The Dash app will start, and you can access it by navigating to `http://127.0.0.1:8050` in your web browser.
+
+The Dash frontend application interacts with the FastAPI backend to perform database management tasks such as creating, updating, and deleting Neo4j database instances. This allows for a seamless integration between the frontend and backend, providing a user-friendly interface for database management.
+
 ## Roadmap
 
 ### Current Development Phase

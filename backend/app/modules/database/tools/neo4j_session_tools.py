@@ -1,5 +1,5 @@
 from contextlib import suppress
-import app.modules.database.tools.query_library.queries as query
+import modules.database.tools.query_library.queries as query
 
 def delete_all_nodes_and_relationships(session):
     total_deleted = 0

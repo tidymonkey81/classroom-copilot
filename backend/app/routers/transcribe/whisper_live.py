@@ -1,5 +1,5 @@
 from fastapi import APIRouter, WebSocket
-from app.modules.whisperlive_client import Client
+from modules.whisper_live.client import Client
 import os
 
 router = APIRouter()

@@ -28,7 +28,7 @@ RUN pip install -r server.txt && rm server.txt
 
 COPY whisper_live /app/whisper_live
 
-EXPOSE 9090
+EXPOSE ${WHISPERLIVE_PORT}
 
 COPY run_server.py /app
 

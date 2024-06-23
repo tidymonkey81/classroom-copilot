@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
-from app.dependencies import admin_dependency
+from dependencies import admin_dependency
 
-import app.modules.database.tools.neo4j_driver_tools as driver
-import app.modules.database.tools.neo4j_session_tools as session
-import app.modules.database.tools.neo4j_http_tools as http
-import app.modules.database.tools.query_library as query
+import modules.database.tools.neo4j_driver_tools as driver
+import modules.database.tools.neo4j_session_tools as session
+import modules.database.tools.neo4j_http_tools as http
+import modules.database.tools.query_library as query
 
 router = APIRouter()
 

@@ -7,10 +7,6 @@ services:
       - ./.env
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    depends_on:
-      - cc_backend
-      - cc_neo4j
-      - cc_whisper
     networks:
       - app-network
     volumes:
@@ -19,7 +15,7 @@ services:
   cc_backend:
     container_name: cc_backend
     build:
-      context: ./backend
+      context: ./backend/app
     env_file:
         - ./.env
     volumes:
@@ -27,16 +23,13 @@ services:
       - data_volume:/data
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
-    depends_on:
-      - cc_neo4j
-      - cc_whisper
     networks:
       - app-network
   
-  cc_whisper:
-    container_name: cc_whisper
+  cc_whisperlive:
+    container_name: cc_whisperlive
     build:
-      context: ./backend/app/modules/WhisperLive
+      context: ./backend/whisper_live_server
       args:
         WHISPERLIVE_PORT: ${WHISPERLIVE_PORT}
     env_file:

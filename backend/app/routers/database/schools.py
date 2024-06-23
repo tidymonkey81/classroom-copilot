@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, File, UploadFile
-from ...dependencies import admin_dependency
+from dependencies import admin_dependency
 from pydantic import BaseModel
 
 router = APIRouter()

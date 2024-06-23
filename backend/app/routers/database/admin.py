@@ -1,9 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from dependencies import admin_dependency
 
-import app.routers.database.tools.neo4j_driver_tools as driver
-import app.routers.database.tools.neo4j_session_tools as session
-import app.routers.database.tools.neo4j_http_tools as http
-import app.routers.database.tools.query_library as query
+import modules.database.tools.neo4j_driver_tools as driver
+import modules.database.tools.neo4j_session_tools as session
+import modules.database.tools.neo4j_http_tools as http
+import modules.database.tools.query_library as query
 
 router = APIRouter()
 
@@ -13,4 +14,19 @@ async def create_database(db_name: str):
 
 @router.post("/reset-database")
 async def reset_database(db_name: str):
-    
+    pass
+
+@router.post("/backup-database")
+async def backup_database(admin: bool = Depends(admin_dependency)):
+    # Placeholder for database backup logic
+    return {"status": "success", "message": "Database backup initiated"}
+
+@router.get("/view-logs")
+async def view_logs(admin: bool = Depends(admin_dependency)):
+    # Placeholder for log viewing logic
+    return {"status": "success", "message": "Logs displayed"}
+
+@router.post("/execute-query")
+async def execute_query(query: str, admin: bool = Depends(admin_dependency)):
+    # Placeholder for query execution logic
+    return {"status": "success", "message": "Query executed"}

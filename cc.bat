@@ -26,10 +26,10 @@ cls
 echo ===== Docker-compose Options =====
 echo 1a: Instantiate all containers
 echo 1b: Instantiate frontend and backend
-echo 1c: Instantiate only frontend
-echo 1d: Instantiate only backend
-echo 1e: Instantiate only Whisper
-echo 1f: Instantiate only Neo4j
+echo 1c: Instantiate only frontend server
+echo 1d: Instantiate only backend server
+echo 1e: Instantiate only WhisperLive Server
+echo 1f: Instantiate only Neo4j server
 echo 1g: Rebuild and instantiate all containers
 echo 1h: Rebuild and instantiate only frontend container
 echo 1i: Rebuild and instantiate only backend container
@@ -56,7 +56,7 @@ if "%choice%"=="1d" (
     goto docker_menu
 )
 if "%choice%"=="1e" (
-    docker-compose up cc_whisper
+    docker-compose up cc_whisperlive
     goto docker_menu
 )
 if "%choice%"=="1f" (
@@ -76,7 +76,7 @@ if "%choice%"=="1i" (
     goto docker_menu
 )
 if "%choice%"=="1j" (
-    docker-compose up --build cc_whisper
+    docker-compose up --build cc_whisperlive
     goto docker_menu
 )
 if "%choice%"=="1k" (
@@ -93,9 +93,9 @@ goto docker_menu
 cls
 echo ===== Run on Host Machine =====
 echo 2a: Run frontend and backend
-echo 2b: Run only frontend
-echo 2c: Run only backend
-echo 2d: Run only Whisper
+echo 2b: Run only frontend server
+echo 2c: Run only backend server
+echo 2d: Run only WhisperLive Server
 echo R: Return to main menu
 echo.
 set /p choice="Select a host option: "
@@ -114,7 +114,7 @@ if "%choice%"=="2c" (
     goto host_menu
 )
 if "%choice%"=="2d" (
-    start cmd /k "cd backend\app\modules\WhisperLive && conda activate cc && python3 run_server.py --port 9090 --backend faster_whisper"
+    start cmd /k "cd backend\whisper_live_server && conda activate cc && python3 run_server.py --port 9090 --backend faster_whisper"
     goto host_menu
 )
 if /i "%choice%"=="R" goto menu

@@ -38,7 +38,7 @@ dist-ssr
 data/*
 
 # Model directories
-backend/app/modules/WhisperLive/whisper_live/models/*
+backend/whisper_live_server/whisper_live/models/*
 
 # Other
 backend/app/temp/*

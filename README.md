@@ -65,6 +65,18 @@ To set up user authentication and manage user roles and permissions, follow thes
 3. On user login, fetch the user's role from your database and store it in the context.
 4. Use React Router to create protected routes that check the user's role before rendering the appropriate dashboard or redirecting to a login page.
 
+## FastAPI Frontend for Admin Functionalities
+
+The `fastapi_frontend` directory houses a dedicated FastAPI application designed for admin functionalities of a Neo4j database. This setup includes:
+
+- **OAuth2 JWT Authentication:** Secure endpoint access with OAuth2 using JWT tokens.
+- **HTTPS, CORS, and Rate Limiting:** Enhanced security measures including HTTPS setup, CORS configuration, and rate limiting.
+- **Static Files and Templates:** Utilizes FastAPI's StaticFiles and Jinja2Templates for serving static content and rendering HTML templates.
+- **Admin Dashboard:** An HTML/CSS/JavaScript-based dashboard interface for database management, including features like database backup, log viewing, and query execution.
+- **API Testing Tools:** Integration of Swagger UI and Redoc for endpoint testing directly from the admin dashboard.
+
+To access the admin dashboard, navigate to the `/fastapi_frontend/templates/dashboard.html` in your web browser after starting the FastAPI server.
+
 ## Dash Frontend Application
 
 To set up and run the Dash frontend application for managing Neo4j database instances, follow these steps:

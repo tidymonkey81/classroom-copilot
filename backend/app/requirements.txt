@@ -10,3 +10,8 @@ ollama
 openai
 websockets
 neontology
+python-jose
+PyAudio
+ffmpeg-python
+scipy
+websocket-client

@@ -26,7 +26,7 @@ app.add_middleware(
 )
 
 # Get the absolute path to the fastapi_frontend directory
-frontend_directory = os.path.join(os.path.dirname(__file__), 'app_frontend')
+frontend_directory = os.path.join(os.path.dirname(__file__), 'frontend')
 
 app.mount("/static", StaticFiles(directory=os.path.join(frontend_directory, 'static')), name="static")
 templates = Jinja2Templates(directory=os.path.join(frontend_directory, 'templates'))

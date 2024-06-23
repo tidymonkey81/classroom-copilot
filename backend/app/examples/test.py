@@ -1,4 +1,4 @@
-from modules.whisperlive_client import TranscriptionClient
+from modules.whisper_live.client import TranscriptionClient
 import os
 import time
 

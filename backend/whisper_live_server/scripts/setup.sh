@@ -1,3 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
-apt-get install portaudio19-dev ffmpeg wget -y
+apt-get update
+apt-get install -y portaudio19-dev ffmpeg wget

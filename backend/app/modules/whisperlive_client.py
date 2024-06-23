@@ -9,7 +9,7 @@ import json
 import websocket
 import uuid
 import time
-import modules.WhisperLive.whisper_live.utils as utils
+import app.modules.WhisperLive.whisper_live.utils as utils
 
 import queue
 

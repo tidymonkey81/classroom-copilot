@@ -10,3 +10,4 @@ ollama
 openai
 websockets
 neontology
+python-jose

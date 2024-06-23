@@ -3,6 +3,8 @@ import logging
 from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from .routers.database import admin, schools, calendar, timetable, curriculum, department, teacher, student
 from .routers.transcribe import whisper_live
 from .routers.llm import ollama, openai
@@ -21,6 +23,9 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"]
 )
+
+app.mount("/static", StaticFiles(directory="fastapi_frontend/static"), name="static")
+templates = Jinja2Templates(directory="fastapi_frontend/templates")
 
 # Database Routes
 app.include_router(admin.router, prefix="/database/admin", tags=["Admin"])

@@ -110,7 +110,7 @@ if "%choice%"=="2b" (
     goto host_menu
 )
 if "%choice%"=="2c" (
-    start cmd /k "cd backend && uvicorn app.main:app --host 0.0.0.0 --port 9500"
+    start cmd /k "cd backend\app && uvicorn main:app --host 0.0.0.0 --port 9500"
     goto host_menu
 )
 if "%choice%"=="2d" (

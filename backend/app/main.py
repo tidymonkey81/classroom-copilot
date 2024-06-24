@@ -1,7 +1,7 @@
 import os
 import logging
 from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI, Request, BackgroundTasks
+from fastapi import FastAPI, Request, BackgroundTasks, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -18,7 +18,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:9501", "http://192.168.0.20:9501", "ws://localhost:9501", "ws://192.168.0.20:9501"],
+    allow_origins=["http://localhost:9500", "http://localhost:9500", "http://192.168.0.20:9500", "ws://localhost:9500", "ws://192.168.0.20:9500", "http://localhost:9501", "http://192.168.0.20:9501", "ws://localhost:9501", "ws://192.168.0.20:9501"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,6 +48,17 @@ app.include_router(whisper_live.router, prefix="/transcribe/live", tags=["Transc
 app.include_router(ollama.router, prefix="/llm", tags=["LLM"])
 app.include_router(openai.router, prefix="/llm", tags=["LLM"])
 
+# Add WebSocket route
+@app.websocket("/transcribe/live/ws/transcriptions")
+async def websocket_endpoint(websocket: WebSocket):
+    await whisper_live.websocket_endpoint(websocket)
+
 @app.get("/dashboard", response_class=HTMLResponse)
 async def get_dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
+
+@app.get("/transcription", response_class=HTMLResponse)
+async def get_transcription(request: Request):
+    backend_url = os.getenv("BACKEND_URL", "localhost")
+    backend_port = os.getenv("BACKEND_PORT", "9500")
+    return templates.TemplateResponse("transcription.html", {"request": request, "backend_url": backend_url, "backend_port": backend_port})

@@ -25,6 +25,10 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:
       - app-network
+    devices:
+      - "/dev/snd:/dev/snd"
+    group_add:
+      - "audio"
   
   cc_whisperlive:
     container_name: cc_whisperlive
@@ -51,6 +55,8 @@ services:
       - ${WHISPERLIVE_PORT}:${WHISPERLIVE_PORT}
     networks:
       - app-network
+    group_add:
+      - "audio"
 
   cc_neo4j:
     image: neo4j:enterprise

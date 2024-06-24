@@ -1,6 +1,7 @@
 import os
 import shutil
 import wave
+import asyncio
 
 import numpy as np
 import pyaudio
@@ -35,7 +36,8 @@ class Client:
         use_vad=True,
         transcription_queue=None,
         callback=None,
-        eos=None
+        eos=None,
+        loop=None
     ):
         """
         Initializes a Client instance for audio recording and streaming to a server.
@@ -66,6 +68,7 @@ class Client:
         self.callback = callback
         self.transcription_queue = transcription_queue or queue.Queue()
         self.eos = eos
+        self.loop = loop
 
         if translate:
             self.task = "translate"
@@ -120,7 +123,7 @@ class Client:
                 if i == len(segments) - 1:
                     self.last_segment = seg
                 elif (self.server_backend == "faster_whisper" and
-                      (not self.transcript or
+                    (not self.transcript or
                         float(seg['start']) >= float(self.transcript[-1]['end']))):
                     self.transcript.append(seg)
         # update last received segment and last valid response time
@@ -128,7 +131,13 @@ class Client:
             self.last_response_received = time.time()
             self.last_received_segment = segments[-1]["text"]
             if self.callback:
-                self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos)  # Call the callback with the last segment text and EOS flag
+                if asyncio.iscoroutinefunction(self.callback):
+                    asyncio.run_coroutine_threadsafe(
+                        self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos),
+                        self.loop
+                    )
+                else:
+                    self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos)  # Call the callback with the last segment text and EOS flag
 
         # Truncate to last 3 entries for brevity.
         # text = text[-3:]
@@ -519,6 +528,8 @@ class TranscriptionTeeClient:
                 shutil.rmtree(f"temp/{self.uid}/chunks")
                 shutil.rmtree(f"temp/{self.uid}")
             os.makedirs(f"temp/{self.uid}/chunks")
+        if self.stream is None:
+            raise RuntimeError("Audio stream could not be opened. Please check your audio device configuration.")
         try:
             for _ in range(0, int(self.rate / self.chunk * self.record_seconds)):
                 if not any(client.recording for client in self.clients):
@@ -673,9 +684,10 @@ class TranscriptionClient(TranscriptionTeeClient):
         callback=None,
         save_output_recording=False,
         output_recording_filename="./output_recording.wav",
-        output_transcription_path="./output.srt"
+        output_transcription_path="./output.srt",
+        loop=None
     ):
-        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt, callback=callback)
+        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt, callback=callback, loop=loop)
         if save_output_recording and not output_recording_filename.endswith(".wav"):
             raise ValueError(f"Please provide a valid `output_recording_filename`: {output_recording_filename}")
         if not output_transcription_path.endswith(".srt"):

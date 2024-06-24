@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transcription Client</title>
+</head>
+<body>
+    <h1>Transcription Client</h1>
+    <form id="transcription-form">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required>
+        <button type="submit">Start Transcription</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('transcription-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const userId = document.getElementById('user_id').value;
+            const response = await fetch(`/transcribe/live/start_transcription/${userId}`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            document.getElementById('message').innerText = result.message;
+        });
+    </script>
+</body>
+</html>

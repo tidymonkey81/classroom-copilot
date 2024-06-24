@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transcription Client</title>
+</head>
+<body>
+    <h1>Transcription Client</h1>
+    <form id="transcription-form">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required>
+        <button type="submit">Start Transcription</button>
+    </form>
+    <div id="message"></div>
+    <div id="transcriptions"></div>
+
+    <script>
+        document.getElementById('transcription-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const userId = document.getElementById('user_id').value;
+            const response = await fetch(`/transcribe/live/start_transcription/${userId}`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            document.getElementById('message').innerText = result.message;
+        });
+
+        const backendUrl = "{{ backend_url }}";
+        const backendPort = "{{ backend_port }}";
+        const ws = new WebSocket(`ws://${backendUrl}:${backendPort}/transcribe/live/ws/transcriptions`);
+        ws.onmessage = function(event) {
+            console.log("WebSocket message received:", event.data); // Debug print
+            const data = JSON.parse(event.data);
+            const transcriptionsDiv = document.getElementById('transcriptions');
+            const newMessage = document.createElement('div');
+            newMessage.innerText = `Utterance: ${data.utterance} (start: ${data.start}, end: ${data.end}, eos: ${data.eos})`;
+            transcriptionsDiv.appendChild(newMessage);
+        };
+
+        ws.onopen = function() {
+            console.log("WebSocket connection established"); // Debug print
+        };
+
+        ws.onerror = function(error) {
+            console.error("WebSocket error:", error); // Debug print
+        };
+
+        ws.onclose = function() {
+            console.log("WebSocket connection closed"); // Debug print
+        };
+    </script>
+</body>
+</html>

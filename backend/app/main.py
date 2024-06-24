@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from routers.database import admin, schools, calendar, timetable, curriculum, department, teacher, student
-from routers.transcribe import whisper_live
+from routers.transcribe import whisper_live, utterance
 from routers.llm import ollama, openai
 
 logging.basicConfig(level=logging.DEBUG)
@@ -43,6 +43,7 @@ app.include_router(student.router, prefix="/database/student", tags=["Student"])
 
 # Transcription Routes
 app.include_router(whisper_live.router, prefix="/transcribe/live", tags=["Transcription"])
+app.include_router(utterance.router, prefix="/transcribe/utterance", tags=["Utterance"])
 
 # LLM Routes
 app.include_router(ollama.router, prefix="/llm", tags=["LLM"])

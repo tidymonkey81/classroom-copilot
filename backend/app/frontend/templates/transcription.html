@@ -11,6 +11,8 @@
         <button type="submit">Start Transcription</button>
     </form>
     <div id="message"></div>
+    <button id="update-utterances">Update Utterances</button>
+    <div id="transcriptions"></div>
 
     <script>
         document.getElementById('transcription-form').addEventListener('submit', async function(event) {
@@ -21,6 +23,23 @@
             });
             const result = await response.json();
             document.getElementById('message').innerText = result.message;
+        });
+
+        document.getElementById('update-utterances').addEventListener('click', async function() {
+            const userId = document.getElementById('user_id').value;
+            if (!userId) {
+                alert("Please enter a User ID and start transcription first.");
+                return;
+            }
+            const utterancesResponse = await fetch(`/transcribe/utterance/get_utterances/${userId}`);
+            const utterancesData = await utterancesResponse.json();
+            const transcriptionsDiv = document.getElementById('transcriptions');
+            transcriptionsDiv.innerHTML = '';  // Clear previous utterances
+            utterancesData.utterances.forEach(utterance => {
+                const newMessage = document.createElement('div');
+                newMessage.innerText = `Utterance: ${utterance.utterance} (start: ${utterance.start}, end: ${utterance.end}, eos: ${utterance.eos})`;
+                transcriptionsDiv.appendChild(newMessage);
+            });
         });
     </script>
 </body>

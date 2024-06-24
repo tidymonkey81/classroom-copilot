@@ -113,7 +113,7 @@ class Client:
         elif status == "WARNING":
             print(f"Message from Server: {message_data['message']}")
 
-    def process_segments(self, segments):
+    def process_segments(self, segments, user):
         """Processes transcript segments."""
         text = []
         for i, seg in enumerate(segments):
@@ -130,7 +130,7 @@ class Client:
             self.last_response_received = time.time()
             self.last_received_segment = segments[-1]["text"]
             if self.callback:
-                self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos, self.user)  # Call the callback with the last segment text and EOS flag
+                self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos, user)  # Call the callback with the last segment text and EOS flag
 
         # Truncate to last 3 entries for brevity.
         # text = text[-3:]
@@ -188,7 +188,7 @@ class Client:
         if "eos" in message.keys():
             self.eos = message["eos"]
             if self.eos is True:
-                self.process_segments(message["segments"])
+                self.process_segments(message["segments"], self.user)
 
     def on_error(self, ws, error):
         print(f"[ERROR] WebSocket Error: {error}")
@@ -675,9 +675,10 @@ class TranscriptionClient(TranscriptionTeeClient):
         callback=None,
         save_output_recording=False,
         output_recording_filename="./output_recording.wav",
-        output_transcription_path="./output.srt"
+        output_transcription_path="./output.srt",
+        user=None
     ):
-        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt, callback=callback)
+        self.client = Client(host, port, lang, translate, model, srt_file_path=output_transcription_path, use_vad=use_vad, secure_websocket=secure_websocket, sslopt=sslopt, callback=callback, user=user)
         if save_output_recording and not output_recording_filename.endswith(".wav"):
             raise ValueError(f"Please provide a valid `output_recording_filename`: {output_recording_filename}")
         if not output_transcription_path.endswith(".srt"):

@@ -29,7 +29,8 @@ def eos_sensitive_callback(text, start, end, is_final, user_id):
             "utterance": text,
             "start": start,
             "end": end,
-            "eos": is_final
+            "eos": is_final,
+            "user": user_id
         }
         response = requests.post(f"http://localhost:9500/transcribe/utterance/handle_whisper_live_eos_utterance/{user_id}", json=message)
         if response.status_code == 200:

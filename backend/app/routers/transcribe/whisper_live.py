@@ -2,6 +2,7 @@ from fastapi import APIRouter, BackgroundTasks
 from modules.whisper_live.client import TranscriptionClient
 import os
 import queue
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,19 +20,13 @@ def setup_directories(user_dir, user_id):
         os.makedirs(user_transcript_dir)
     return user_transcript_dir
 
-import requests
-
-# TODO: Fix this. user_id needs to implemented in client.py and maybe server.py
 def eos_sensitive_callback(text, start, end, is_final, user_id):
     if is_final:
-        print(f"Utterance: {text} (start: {start}, end: {end})")
         message = {
             "utterance": text,
-            "start": start,
-            "end": end,
-            "eos": is_final,
             "user": user_id
         }
+        print(f"{user_id} uttered: {message}")
         response = requests.post(f"http://localhost:9500/transcribe/utterance/handle_whisper_live_eos_utterance/{user_id}", json=message)
         if response.status_code == 200:
             print("Utterance sent successfully")
@@ -41,8 +36,7 @@ def eos_sensitive_callback(text, start, end, is_final, user_id):
 def run_transcription_client(user_id: str):
     user_dir = "../../data/users"
     user_transcript_dir = setup_directories(user_dir, user_id)
-
-    transcription_queue = queue.Queue()
+    
     client = TranscriptionClient(
         host,
         port,
@@ -52,7 +46,8 @@ def run_transcription_client(user_id: str):
         save_output_recording=True,
         output_recording_filename=f"{user_transcript_dir}/output_recording.wav",
         output_transcription_path=f"{user_transcript_dir}/output.srt",
-        callback=lambda text, start, end, is_final, user_id=user_id: eos_sensitive_callback(text, start, end, is_final, user_id)
+        callback=lambda text, start, end, is_final, user_id=user_id: eos_sensitive_callback(text, start, end, is_final, user_id),
+        user=user_id
     )
 
     client()

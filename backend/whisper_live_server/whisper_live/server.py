@@ -382,7 +382,7 @@ class ServeClientBase(object):
     SERVER_READY = "SERVER_READY"
     DISCONNECT = "DISCONNECT"
 
-    def __init__(self, client_uid, websocket):
+    def __init__(self, client_uid, websocket, user=None):
         self.client_uid = client_uid
         self.websocket = websocket
         self.frames = b""
@@ -399,6 +399,7 @@ class ServeClientBase(object):
         self.add_pause_thresh = 3       # add a blank to segment list as a pause(no speech) for 3 seconds
         self.transcript = []
         self.send_last_n_segments = 10
+        self.user = user
         self.eos = False
 
         # text formatting
@@ -527,7 +528,8 @@ class ServeClientBase(object):
             json_packet = json.dumps({
                     "uid": self.client_uid,
                     "segments": segments,
-                    "eos": self.eos  # Send the eos flag as part of the WebSocket message
+                    "eos": self.eos,  # Send the eos flag as part of the WebSocket message
+                    "user": self.user
                 })
             self.websocket.send(
                 json_packet
@@ -740,7 +742,7 @@ class ServeClientFasterWhisper(ServeClientBase):
     SINGLE_MODEL_LOCK = threading.Lock()
 
     def __init__(self, websocket, task="transcribe", device=None, language=None, client_uid=None, model="small.en",
-                 initial_prompt=None, vad_parameters=None, use_vad=True, single_model=False):
+                 initial_prompt=None, vad_parameters=None, use_vad=True, single_model=False, user=None):
         """
         Initialize a ServeClient instance.
         The Whisper model is initialized based on the client's language and device availability.
@@ -771,7 +773,7 @@ class ServeClientFasterWhisper(ServeClientBase):
         self.initial_prompt = initial_prompt
         self.vad_parameters = vad_parameters or {"threshold": 0.5}
         self.no_speech_thresh = 0.45
-        
+        self.user = user
         self.eos = None
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -1001,6 +1003,8 @@ class ServeClientFasterWhisper(ServeClientBase):
             }
         if eos is not None:
             segment['eos'] = eos
+        if self.user is not None:
+            segment['user'] = self.user
         return segment
 
     def update_segments(self, segments, duration):

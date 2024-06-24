@@ -113,7 +113,7 @@ class Client:
         elif status == "WARNING":
             print(f"Message from Server: {message_data['message']}")
 
-    def process_segments(self, segments, user):
+    def process_segments(self, segments):
         """Processes transcript segments."""
         text = []
         for i, seg in enumerate(segments):
@@ -130,7 +130,7 @@ class Client:
             self.last_response_received = time.time()
             self.last_received_segment = segments[-1]["text"]
             if self.callback:
-                self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos, user)  # Call the callback with the last segment text and EOS flag
+                self.callback(segments[-1]["text"], segments[-1]["start"], segments[-1]["end"], self.eos, self.user)  # Call the callback with the last segment text, EOS flag and User
 
         # Truncate to last 3 entries for brevity.
         # text = text[-3:]
@@ -152,7 +152,7 @@ class Client:
         """
         message = json.loads(message)
 
-        logging.info("[INFO]: Received message: %s", message)
+        logging.debug("[DEBUG]: Received message: %s", message)
         
         if self.uid != message.get("uid"):
             print("[ERROR]: invalid client uid")
@@ -188,7 +188,7 @@ class Client:
         if "eos" in message.keys():
             self.eos = message["eos"]
             if self.eos is True:
-                self.process_segments(message["segments"], self.user)
+                self.process_segments(message["segments"])
 
     def on_error(self, ws, error):
         print(f"[ERROR] WebSocket Error: {error}")

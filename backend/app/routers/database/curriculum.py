@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from dependencies import admin_dependency
 from modules.database.tools.neo4j_driver_tools import get_driver
 from modules.database.tools.neo4j_http_tools import create_node, create_relationship
-from modules.database.tools.xl_planner_tools import get_excel_sheets
+import modules.database.tools.xl_planner_tools as xl
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ async def upload_curriculum(file: UploadFile = File(...)):
 
     try:
         # Read the Excel file into dataframes
-        dataframes = get_excel_sheets(await file.read())
+        dataframes = xl.create_dataframes(await file.read())
         # Process the dataframes to create the graph
         result = process_curriculum_data(dataframes)
         return {"status": "Success", "data": result}
@@ -31,10 +31,4 @@ def process_curriculum_data(dataframes):
     driver = get_driver()
     with driver.session() as session:
         # Example: Create nodes and relationships
-        for label, df in dataframes.items():
-            for _, row in df.iterrows():
-                node_properties = prepare_local_curriculum_node(label, row)
-                node = create_node(session, label, node_properties)
-                # Assume relationships are to be created here
-                # create_relationship(session, start_node, end_node, rel_type, properties)
         return "Graph created successfully"

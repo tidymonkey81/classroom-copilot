@@ -1,10 +1,7 @@
-import sys
-import os
 import pandas as pd
 from datetime import datetime, time, timedelta
 
-# Function to output all excel sheets as pandas dataframes with specific naming
-def get_excel_sheets(excel_file, return_clean=False):
+def create_dataframes(excel_file, return_clean=False):
     excel_sheets = pd.read_excel(excel_file, sheet_name=None)
     return {sheet.lower() + '_df': data for sheet, data in excel_sheets.items()}
 
@@ -114,7 +111,13 @@ def extract_period_times(calendar_df):
             period_times[period_name][time_type] = time_obj
     return period_times
 
-# Function to convert a date string to a date object
+def replace_nan_with_default(data, default_values):
+    for key in default_values:
+        if pd.isna(data.get(key, None)):
+            logging.warning(f"Replacing NaN in {key} with default value '{default_values[key]}'")
+            data[key] = default_values[key]
+    return data
+
 def convert_excel_date(excel_date):
     if pd.isna(excel_date) or excel_date == 'Null':
         # logging.debug(f"Doing nothing. Excel date is NaN or Null: {excel_date}")
@@ -127,7 +130,6 @@ def convert_excel_date(excel_date):
         # logging.debug(f"Making assumption. Excel date is a fraction of the day: {excel_date}")
         return (datetime(1899, 12, 30) + timedelta(days=excel_date)).date()
 
-# Function to convert a time string to a time object
 def convert_to_date(date_str):
     try:
         # logging.debug(f"Converting {date_str} to date object...")

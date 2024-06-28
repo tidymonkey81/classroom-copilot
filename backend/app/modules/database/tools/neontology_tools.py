@@ -1,5 +1,5 @@
 import modules.logger_tool as logger
-import sys
+
 import os
 import neo4j
 from neontology import BaseNode, BaseRelationship, init_neontology

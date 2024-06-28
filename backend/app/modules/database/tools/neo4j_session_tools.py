@@ -1,5 +1,9 @@
+import modules.logger_tool as logger
+import os
+import modules.database.tools.queries as query
 from contextlib import suppress
-import modules.database.tools.query_library.queries as query
+
+logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
 
 def delete_all_nodes_and_relationships(session):
     total_deleted = 0
@@ -34,10 +38,6 @@ def close_session(session):
     if session:
         with suppress(Exception):
             session.close()
-
-
-
-
 
 def delete_nodes(session, criteria, delete_related=False):
     """
@@ -303,13 +303,14 @@ def find_nodes_by_label_and_properties(session, label, properties):
     Function to find nodes in Neo4j database by label and properties.
 
     Args:
-        driver (neo4j.Driver): The Neo4j driver.
+        session (neo4j.Session): The Neo4j session.
         label (str): The label of the nodes to find.
         properties (dict): A dictionary of properties to match.
 
     Returns:
         List of matched nodes.
     """
+    logging.debug(f"Finding nodes with label: {label} and properties: {properties}")
     with session:
         return session.read_transaction(_find_nodes_by_label_and_properties, label, properties)
 
@@ -319,8 +320,7 @@ def _find_nodes_by_label_and_properties(tx, label, properties):
     WHERE {' AND '.join([f'n.{key} = ${key}' for key in properties.keys()])}
     RETURN n
     """
-    # logging.query(f"Running query: {query}")
-    print(f"Running query: {query}")
+    logging.debug(f"Running query: {query}")
     result = tx.run(query, **properties)
     return [record["n"] for record in result]
 

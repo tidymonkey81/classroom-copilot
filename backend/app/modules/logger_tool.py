@@ -1,10 +1,10 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
 import os
 import sys
-from dotenv import load_dotenv, find_dotenv
 import logging
 import datetime
-
-load_dotenv(find_dotenv())
 
 # Define a global format string with alignment
 LOG_FORMAT = "%(asctime)s %(levelname)-10s: %(filename)s > %(funcName)s >>> %(message)s"

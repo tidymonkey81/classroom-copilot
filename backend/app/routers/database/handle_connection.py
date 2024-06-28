@@ -4,7 +4,7 @@ from dependencies import admin_dependency
 import modules.database.tools.neo4j_driver_tools as driver
 import modules.database.tools.neo4j_session_tools as session
 import modules.database.tools.neo4j_http_tools as http
-import modules.database.tools.query_library as query
+import modules.database.tools.queries as query
 
 router = APIRouter()
 

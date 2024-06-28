@@ -1,18 +1,25 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 import os
-import logging
+
+import modules.logger_tool as logger
+os.environ['LOG_NAME'] = 'app'
+os.environ['LOG_DIR'] = 'logs'
+os.environ['LOG_LEVEL'] = 'DEBUG'
+
+logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
+
+from routers.database import admin, schools, calendar, timetable, curriculum, department, teacher, student
+from routers.transcribe import whisper_live, utterance
+from routers.llm import ollama, openai
+from routers.connections.arbor_router import router as arbor_router
+
 from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI, Request, BackgroundTasks, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from routers.database import admin, schools, calendar, timetable, curriculum, department, teacher, student
-from routers.transcribe import whisper_live, utterance
-from routers.llm import ollama, openai
-
-logging.basicConfig(level=logging.DEBUG)
-
-load_dotenv(find_dotenv())
 
 app = FastAPI()
 
@@ -48,6 +55,9 @@ app.include_router(utterance.router, prefix="/transcribe/utterance", tags=["Utte
 # LLM Routes
 app.include_router(ollama.router, prefix="/llm", tags=["LLM"])
 app.include_router(openai.router, prefix="/llm", tags=["LLM"])
+
+# Arbor Data Routes
+app.include_router(arbor_router, prefix="/arbor", tags=["Arbor Data"])
 
 # Add WebSocket route
 @app.websocket("/transcribe/live/ws/transcriptions")

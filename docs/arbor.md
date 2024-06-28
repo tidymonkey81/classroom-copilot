@@ -26,3 +26,17 @@ URL: [https://fort-pitt-grammar-school.uk.arbor.sc/data-export/export/id/6/h/d88
 Authorization: Basic a2NhcnRlcjowNmM3ODA4YjE5NzI3M2ZmMGUxMGM1N2MzNTE0MDkzMzA4Yzk2NTY0
 
 = Web.Page(Web.Contents("https://fort-pitt-grammar-school.uk.arbor.sc/data-export/export/id/6/h/d884125414d90c23/format/json/v/2/", [Headers=[Authorization="Basic a2NhcnRlcjowNmM3ODA4YjE5NzI3M2ZmMGUxMGM1N2MzNTE0MDkzMzA4Yzk2NTY0"]])){0}[Data]
+
+## Behavioural Incidents Reporting
+
+URL: [https://fort-pitt-grammar-school.uk.arbor.sc/data-export/export/id/7/h/73f7d5c93871aaf1/format/json/v/2/]
+Authorization: Basic a2NhcnRlcjo0NzdmZGM0M2ExZGM5ZTljYzM3OTJiMzJhMzg5YTY1N2ZmMWJjM2Mx
+
+= Web.Page(Web.Contents("https://fort-pitt-grammar-school.uk.arbor.sc/data-export/export/id/7/h/73f7d5c93871aaf1/format/json/v/2/", [Headers=[Authorization="Basic a2NhcnRlcjo0NzdmZGM0M2ExZGM5ZTljYzM3OTJiMzJhMzg5YTY1N2ZmMWJjM2Mx"]])){0}[Data]
+
+## Y7 Lesson Timetable
+
+URL: [https://fort-pitt-grammar-school.uk.arbor.sc/data-export/export/id/8/h/751a5387bf918c55/format/json/v/2/]
+Authorization: Basic a2NhcnRlcjoyMjNhMGQ5YmI5ZWU3MDkwMDlkMjk5MTk2ZTY5MDI3NjllMGJiNDNj
+
+= Json.Document(Web.Contents("https://fort-pitt-grammar-school.uk.arbor.sc/data-export/export/id/8/h/751a5387bf918c55/format/json/v/2/", [Headers=[Authorization="Basic a2NhcnRlcjoyMjNhMGQ5YmI5ZWU3MDkwMDlkMjk5MTk2ZTY5MDI3NjllMGJiNDNj"]]))

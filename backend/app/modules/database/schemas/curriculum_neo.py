@@ -14,7 +14,7 @@ class SubjectNode(BaseNode): # TODO: This is an example, replace with actual sch
     __primarylabel__: ClassVar[str] = 'Subject'
     __primaryproperty__: ClassVar[str] = 'subject_id'
     subject_id: str
-    subject: str
+    subject_name: str
     
 class TopicNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'Topic'

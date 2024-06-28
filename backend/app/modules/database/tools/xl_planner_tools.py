@@ -1,9 +1,41 @@
+import modules.logger_tool as logger
+import os
+
+logging = logger.get_logger(name=os.getenv('LOG_NAME'))
+
 import pandas as pd
 from datetime import datetime, time, timedelta
 
 def create_dataframes(excel_file, return_clean=False):
     excel_sheets = pd.read_excel(excel_file, sheet_name=None)
     return {sheet.lower() + '_df': data for sheet, data in excel_sheets.items()}
+
+def replace_nan_with_default(data, default_values):
+    for key in default_values:
+        if pd.isna(data.get(key, None)):
+            logging.warning(f"Replacing NaN in {key} with default value '{default_values[key]}'")
+            data[key] = default_values[key]
+    return data
+
+def convert_excel_date(excel_date):
+    if pd.isna(excel_date) or excel_date == 'Null':
+        # logging.debug(f"Doing nothing. Excel date is NaN or Null: {excel_date}")
+        return None
+    if isinstance(excel_date, datetime):
+        # logging.debug(f"Sending it back. Excel date is already a datetime: {excel_date}")
+        return excel_date.date()
+    else:
+        # Assuming excel_date is a fraction of the day
+        # logging.debug(f"Making assumption. Excel date is a fraction of the day: {excel_date}")
+        return (datetime(1899, 12, 30) + timedelta(days=excel_date)).date()
+
+def convert_to_date(date_str):
+    try:
+        # logging.debug(f"Converting {date_str} to date object...")
+        return pd.to_datetime(date_str, dayfirst=True).date()  # Assuming day comes first in your date format
+    except ValueError:
+        # logging.error(f"Error converting {date_str} to date object.")
+        return None
 
 def extract_academic_year_info(calendar_df, info_type):
     # logging.debug(f"Extracting academic year info for {info_type}...")
@@ -110,31 +142,4 @@ def extract_period_times(calendar_df):
                 period_times[period_name]['class'] = period_class
             period_times[period_name][time_type] = time_obj
     return period_times
-
-def replace_nan_with_default(data, default_values):
-    for key in default_values:
-        if pd.isna(data.get(key, None)):
-            logging.warning(f"Replacing NaN in {key} with default value '{default_values[key]}'")
-            data[key] = default_values[key]
-    return data
-
-def convert_excel_date(excel_date):
-    if pd.isna(excel_date) or excel_date == 'Null':
-        # logging.debug(f"Doing nothing. Excel date is NaN or Null: {excel_date}")
-        return None
-    if isinstance(excel_date, datetime):
-        # logging.debug(f"Sending it back. Excel date is already a datetime: {excel_date}")
-        return excel_date.date()
-    else:
-        # Assuming excel_date is a fraction of the day
-        # logging.debug(f"Making assumption. Excel date is a fraction of the day: {excel_date}")
-        return (datetime(1899, 12, 30) + timedelta(days=excel_date)).date()
-
-def convert_to_date(date_str):
-    try:
-        # logging.debug(f"Converting {date_str} to date object...")
-        return pd.to_datetime(date_str, dayfirst=True).date()  # Assuming day comes first in your date format
-    except ValueError:
-        # logging.error(f"Error converting {date_str} to date object.")
-        return None
 

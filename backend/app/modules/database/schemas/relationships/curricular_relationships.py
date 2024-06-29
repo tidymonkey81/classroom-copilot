@@ -1,6 +1,6 @@
-import modules.database.schemas.curriculum_neo as neo_curriculum 
+import modules.database.schemas.curriculum_neo as neo_curriculum
+from modules.database.tools.neontology.baserelationship import BaseRelationship
 from typing import ClassVar
-from neontology import BaseRelationship
 
 ## Curriculum layer relationships
 class SubjectForKeyStage(BaseRelationship):

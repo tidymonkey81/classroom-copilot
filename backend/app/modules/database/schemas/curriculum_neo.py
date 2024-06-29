@@ -1,9 +1,7 @@
+from modules.database.tools.neontology.basenode import BaseNode
 from typing import ClassVar
-from neontology import BaseNode
 
-# Neo4j Nodes and relationships using Neontology
 # Curriculum layer
-
 class KeyStageNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'KeyStage'
     __primaryproperty__: ClassVar[str] = 'key_stage'

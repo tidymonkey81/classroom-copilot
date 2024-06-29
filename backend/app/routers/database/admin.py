@@ -8,16 +8,34 @@ import modules.database.tools.queries as query
 import os
 from fastapi import APIRouter, Depends
 from dependencies import admin_dependency
+from pydantic import BaseModel
 
 router = APIRouter()
 
 logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
+
+class DatabaseRequest(BaseModel):
+    db_name: str
 
 @router.post("/create-database")
 async def create_database(db_name: str):
     logging.info(f"Creating database: {db_name}")
     generated_query = query.create_database(db_name)
     logging.info(f"Generated query: {generated_query}")
+    return http.send_query(generated_query, encoded_credentials=None, params=None, method="POST", database="system", endpoint="/tx/commit")
+
+@router.post("/stop-database")
+async def stop_database(request: DatabaseRequest):
+    db_name = request.db_name
+    logging.info(f"Stopping database: {db_name}")
+    generated_query = query.stop_database(db_name)
+    return http.send_query(generated_query, encoded_credentials=None, params=None, method="POST", database="system", endpoint="/tx/commit")
+
+@router.post("/drop-database")
+async def drop_database(request: DatabaseRequest):
+    db_name = request.db_name
+    logging.info(f"Dropping database: {db_name}")
+    generated_query = query.drop_database(db_name)
     return http.send_query(generated_query, encoded_credentials=None, params=None, method="POST", database="system", endpoint="/tx/commit")
 
 @router.post("/reset-database")

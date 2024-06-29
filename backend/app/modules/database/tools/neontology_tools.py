@@ -1,9 +1,12 @@
 import modules.logger_tool as logger
 
+from modules.database.tools.neontology.graphconnection import init_neontology
+from modules.database.tools.neontology.basenode import BaseNode
+from modules.database.tools.neontology.baserelationship import BaseRelationship
+from pydantic import ValidationError
+
 import os
 import neo4j
-from neontology import BaseNode, BaseRelationship, init_neontology
-from pydantic import ValidationError
 
 logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
 

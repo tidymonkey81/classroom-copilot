@@ -97,6 +97,7 @@ class BaseRelationship(CommonModel):  # pyre-ignore[13]
 
     def merge(
         self,
+        database: Optional[str] = 'neo4j'  # default to 'neo4j' if not specified
     ) -> None:
         """Merge this relationship into the database."""
         source_label = self.source.__primarylabel__
@@ -115,6 +116,7 @@ class BaseRelationship(CommonModel):  # pyre-ignore[13]
         merge_props = ", ".join([f"{x}: ${x}" for x in self._merge_on])
 
         cypher = f"""
+        USE {database}
         MATCH (source:{source_label} {{ {source_pp}: $source_prop }}),
             (target:{target_label} {{ {target_pp}: $target_prop }})
         MERGE (source)-[r:{rel_type} {{ {merge_props} }}]->(target)
@@ -187,6 +189,7 @@ class BaseRelationship(CommonModel):  # pyre-ignore[13]
 
         cypher = f"""
         UNWIND $rel_list AS rel
+        USE {database}
         MATCH (source:{source_label})
         WHERE source.{source_prop} = rel.source_prop
         MATCH (target:{target_label})

@@ -94,10 +94,8 @@ def create_or_merge_neontology_relationship(relationship: BaseRelationship, data
     try:
         if operation == "create":
             relationship.create(database=database)
-            logging.debug(f"Relationship created: {relationship}")
         elif operation == "merge":
             relationship.merge(database=database)
-            logging.debug(f"Relationship merged: {relationship}")
         else:
             logging.error(f"Invalid operation: {operation}")
     except Exception as e:

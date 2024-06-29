@@ -7,12 +7,25 @@ class KeyStageNode(BaseNode):
     __primaryproperty__: ClassVar[str] = 'key_stage'
     key_stage_level: int
     key_stage: str
+    
+class YearGroupNode(BaseNode):
+    __primarylabel__: ClassVar[str] = 'YearGroup'
+    __primaryproperty__: ClassVar[str] = 'year_group_id'
+    year_group_id: str
+    year_group_name: str
 
 class SubjectNode(BaseNode): # TODO: This is an example, replace with actual schema
     __primarylabel__: ClassVar[str] = 'Subject'
     __primaryproperty__: ClassVar[str] = 'subject_id'
     subject_id: str
     subject_name: str
+    
+class SyllabusNode(BaseNode):
+    __primarylabel__: ClassVar[str] = 'Syllabus'
+    __primaryproperty__: ClassVar[str] = 'syllabus_id'
+    syllabus_id: str
+    syllabus_title: str
+    
     
 class TopicNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'Topic'

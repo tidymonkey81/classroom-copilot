@@ -13,7 +13,7 @@ def create_dataframes(excel_file, return_clean=False):
 def replace_nan_with_default(data, default_values):
     for key in default_values:
         if pd.isna(data.get(key, None)):
-            logging.warning(f"Replacing NaN in {key} with default value '{default_values[key]}'")
+            # logging.debug(f"Replacing NaN in {key} with default value '{default_values[key]}'")
             data[key] = default_values[key]
     return data
 

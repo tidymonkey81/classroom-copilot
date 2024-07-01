@@ -19,6 +19,7 @@ class KeyStageSyllabusNode(BaseNode):
     __primaryproperty__: ClassVar[str] = 'ks_syllabus_id'
     ks_syllabus_id: str
     ks_syllabus_name: Optional[str] = None
+    ks_syllabus_key_stage: Optional[str] = None
     ks_syllabus_subject: Optional[str] = None
 
 class YearGroupSyllabusNode(BaseNode):
@@ -26,6 +27,7 @@ class YearGroupSyllabusNode(BaseNode):
     __primaryproperty__: ClassVar[str] = 'yr_syllabus_id'
     yr_syllabus_id: str
     yr_syllabus_name: Optional[str] = None
+    yr_syllabus_year_group: Optional[str] = None
     yr_syllabus_subject: Optional[str] = None
     
 class SubjectNode(BaseNode): # TODO: This is an example, replace with actual schema

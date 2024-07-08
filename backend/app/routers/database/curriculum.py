@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from dependencies import admin_dependency
 from modules.database.tools.neo4j_driver_tools import get_driver
 from modules.database.tools.neo4j_http_tools import create_node, create_relationship
-import modules.database.tools.xl_planner_tools as xl
+import modules.database.tools.xl_tools as xl
 
 router = APIRouter()
 

@@ -11,8 +11,10 @@ logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LE
 
 from routers.database import admin, schools, calendar, timetable, curriculum, department, teacher, student
 from routers.transcribe import whisper_live, utterance
-from routers.llm import ollama, openai
+from routers.llm.private.ollama import ollama
+from routers.llm.public.openai import openai
 from routers.connections.arbor_router import router as arbor_router
+from routers.langchain.graph_qa import router as graph_qa_router
 
 from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI, Request, BackgroundTasks, WebSocket
@@ -53,8 +55,11 @@ app.include_router(whisper_live.router, prefix="/transcribe/live", tags=["Transc
 app.include_router(utterance.router, prefix="/transcribe/utterance", tags=["Utterance"])
 
 # LLM Routes
-app.include_router(ollama.router, prefix="/llm", tags=["LLM"])
-app.include_router(openai.router, prefix="/llm", tags=["LLM"])
+app.include_router(ollama.router, prefix="/llm/private/ollama", tags=["LLM"])
+app.include_router(openai.router, prefix="/llm/public/openai", tags=["LLM"])
+
+# Langchain routes
+app.include_router(graph_qa_router, prefix="/langchain/graph_qa", tags=["Langchain"])
 
 # Arbor Data Routes
 app.include_router(arbor_router, prefix="/arbor", tags=["Arbor Data"])

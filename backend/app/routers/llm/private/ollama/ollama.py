@@ -12,8 +12,8 @@ load_dotenv(find_dotenv())
 router = APIRouter()
 ## client = Client(host='http://localhost:11434')
 
-ollama_host = os.getenv("OLLAMA_LOCAL_URL")
-ollama_port = os.getenv("OLLAMA_LOCAL_PORT")
+ollama_host = os.getenv("OLLAMA_URL")
+ollama_port = os.getenv("OLLAMA_PORT")
 
 if not ollama_host or not ollama_port:
     raise ValueError("Environment variables OLLAMA_LOCAL_URL or OLLAMA_LOCAL_PORT are not set")

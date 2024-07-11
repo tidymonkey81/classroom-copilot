@@ -1,13 +1,13 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
 import os
 import sys
-from dotenv import load_dotenv, find_dotenv
 import logging
 import datetime
 
-load_dotenv(find_dotenv())
-
 # Define a global format string with alignment
-LOG_FORMAT = "%(asctime)s %(levelname)-10s: %(filename)s > %(funcName)s >>> %(message)s"
+LOG_FORMAT = "%(asctime)s %(levelname)-8s: %(filename)-20s:%(funcName)-20s:%(lineno)-4d >>> %(message)s"
 
 # ANSI escape sequences for colors
 class LogColors:
@@ -56,10 +56,14 @@ class ColoredFormatter(logging.Formatter):
 
     def format(self, record):
         record.filename = record.filename[:-3]  # Remove '.py' from filename
-        # Use the global format string
-        log_fmt = (self.COLORS.get(record.levelno) + LOG_FORMAT + LogColors.RESET)
+        log_fmt = self.COLORS.get(record.levelno) + LOG_FORMAT + LogColors.RESET
         formatter = logging.Formatter(log_fmt)
-        return formatter.format(record)
+        formatted_message = formatter.format(record)
+        
+        # Split the message into lines and add padding to each line
+        lines = formatted_message.split('\n')
+        padded_lines = [lines[0]] + [' ' * 30 + line for line in lines[1:]]
+        return '\n'.join(padded_lines)
 
 # Define custom logging levels
 SUCCESS_LOG_LEVEL = 24
@@ -144,7 +148,7 @@ def set_log_path(env_var):
     return env_path
 
 # Function to get a logger
-def get_logger(name=None, log_level=None, log_path=None, log_file=None, delimiter='_'):
+def get_logger(name=None, log_level=None, log_path=None, log_file=None, delimiter='_', runtime=False, log_format=None):
     """
     Creates and configures a logger with both console and file handlers.
 
@@ -152,6 +156,7 @@ def get_logger(name=None, log_level=None, log_path=None, log_file=None, delimite
         name (str, optional): The name of the logger. Defaults to '__name__'.
         log_level (str, optional): The logging level. Defaults to 'INFO'.
         log_file (str, optional): The file name for the file handler. If None, no file handler is added.
+        log_format (str, optional): The format string for the log messages. If None, no formatting is applied. If "default", the default LOG_FORMAT is used.
 
     Returns:
         logging.Logger: The configured logger.
@@ -189,19 +194,30 @@ def get_logger(name=None, log_level=None, log_path=None, log_file=None, delimite
     # Disable propagation to avoid duplicate logs in the root logger
     logger.propagate = False
 
-    # Formatters
-    console_formatter = ColoredFormatter(LOG_FORMAT)
-    file_formatter = FileFormatter(LOG_FORMAT)
+    # Determine the format string
+    if log_format is None:
+        console_formatter = logging.Formatter()
+        file_formatter = logging.Formatter()
+    elif log_format == "default":
+        console_formatter = ColoredFormatter(LOG_FORMAT)
+        file_formatter = FileFormatter(LOG_FORMAT)
+    else:
+        console_formatter = ColoredFormatter(log_format)
+        file_formatter = FileFormatter(log_format)
 
     # Check if the logger already has handlers
     if not logger.handlers:
         # Add console and file handlers if not present
-        ch = logging.StreamHandler()
+        ch = logging.StreamHandler(sys.stdout)
         ch.setLevel(desired_level)
         ch.setFormatter(console_formatter)
+        ch.stream = open(sys.stdout.fileno(), 'w', encoding='utf-8', closefd=False)
         logger.addHandler(ch)
         os.makedirs(log_path, exist_ok=True)
-        log_file_path = os.path.join(log_path, f"{log_file}{delimiter}{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log")
+        if runtime:
+            log_file_path = os.path.join(log_path, f"{log_file}.log")
+        else:
+            log_file_path = os.path.join(log_path, f"{log_file}{delimiter}{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log")
         fh = logging.FileHandler(log_file_path)
         fh.setLevel(desired_level)
         fh.setFormatter(file_formatter)
@@ -215,7 +231,6 @@ def get_logger(name=None, log_level=None, log_path=None, log_file=None, delimite
             elif isinstance(handler, logging.StreamHandler):
                 handler.setFormatter(console_formatter)
     return logger
-
 
 # function to get a list of all the loggers everywhere
 def get_loggers():
@@ -232,5 +247,4 @@ def get_loggers():
     loggers = []
     for name in logging.Logger.manager.loggerDict:
         loggers.append(logging.getLogger(name))
-    return loggers
     return loggers

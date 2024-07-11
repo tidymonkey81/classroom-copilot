@@ -1,5 +1,21 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+import os
+import modules.logger_tool as logger
+log_name = 'api_modules_database_tools_neo4j_session_tools'
+user_profile = os.environ.get("USERPROFILE", "")
+app_dir = os.environ.get("APP_DIR", "")
+log_dir = os.path.join(user_profile, app_dir, "logs")
+logging = logger.get_logger(
+    name=log_name,
+    log_level='DEBUG',
+    log_path=log_dir,
+    log_file=log_name,
+    runtime=True,
+    log_format='default'
+)
+import modules.database.tools.queries as query
 from contextlib import suppress
-import modules.database.tools.query_library.queries as query
 
 def delete_all_nodes_and_relationships(session):
     total_deleted = 0
@@ -34,10 +50,6 @@ def close_session(session):
     if session:
         with suppress(Exception):
             session.close()
-
-
-
-
 
 def delete_nodes(session, criteria, delete_related=False):
     """
@@ -303,13 +315,14 @@ def find_nodes_by_label_and_properties(session, label, properties):
     Function to find nodes in Neo4j database by label and properties.
 
     Args:
-        driver (neo4j.Driver): The Neo4j driver.
+        session (neo4j.Session): The Neo4j session.
         label (str): The label of the nodes to find.
         properties (dict): A dictionary of properties to match.
 
     Returns:
         List of matched nodes.
     """
+    logging.debug(f"Finding nodes with label: {label} and properties: {properties}")
     with session:
         return session.read_transaction(_find_nodes_by_label_and_properties, label, properties)
 
@@ -319,8 +332,7 @@ def _find_nodes_by_label_and_properties(tx, label, properties):
     WHERE {' AND '.join([f'n.{key} = ${key}' for key in properties.keys()])}
     RETURN n
     """
-    # logging.query(f"Running query: {query}")
-    print(f"Running query: {query}")
+    logging.debug(f"Running query: {query}")
     result = tx.run(query, **properties)
     return [record["n"] for record in result]
 

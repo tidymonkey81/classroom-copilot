@@ -1,39 +1,86 @@
+import modules.database.schemas.curriculum_neo as neo_curriculum
+from modules.database.tools.neontology.baserelationship import BaseRelationship
 from typing import ClassVar
-from neontology import BaseRelationship
 
 ## Curriculum layer relationships
 class SubjectForKeyStage(BaseRelationship):
     __relationshiptype__: ClassVar[str] = 'SUBJECT_FOR_KEY_STAGE'
-    source: SubjectNode
-    target: KeyStageNode
+    source: neo_curriculum.SubjectNode
+    target: neo_curriculum.KeyStageNode
+
+class TopicPartOfYearGroupSyllabus(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'YEAR_SYLLABUS_INCLUDES_TOPIC'
+    source: neo_curriculum.YearGroupSyllabusNode
+    target: neo_curriculum.TopicNode
+
+class YearGroupHasYearGroupSyllabus(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'YEAR_GROUP_HAS_YEAR_GROUP_SYLLABUS'
+    source: neo_curriculum.YearGroupNode
+    target: neo_curriculum.YearGroupSyllabusNode
+
+class KeyStageSyllabusIncludesYearGroupSyllabus(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'KEY_STAGE_SYLLABUS_INCLUDES_YEAR_GROUP_SYLLABUS'
+    source: neo_curriculum.KeyStageSyllabusNode
+    target: neo_curriculum.YearGroupSyllabusNode
+
+class KeyStageIncludesKeyStageSyllabus(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'KEY_STAGE_INCLUDES_KEY_STAGE_SYLLABUS'
+    source: neo_curriculum.KeyStageNode
+    target: neo_curriculum.KeyStageSyllabusNode
 
 class KeyStageIncludesTopic(BaseRelationship):
     __relationshiptype__: ClassVar[str] = 'KEY_STAGE_INCLUDES_TOPIC'
-    source: KeyStageNode
-    target: TopicNode
+    source: neo_curriculum.KeyStageNode
+    target: neo_curriculum.TopicNode
 
 class SubjectIncludesTopic(BaseRelationship):
     __relationshiptype__: ClassVar[str] = 'SUBJECT_INCLUDES_TOPIC'
-    source: SubjectNode
-    target: TopicNode
+    source: neo_curriculum.SubjectNode
+    target: neo_curriculum.TopicNode
 
 class TopicIncludesTopicLesson(BaseRelationship):
     __relationshiptype__: ClassVar[str] = 'TOPIC_INCLUDES_LESSON'
-    source: TopicNode
-    target: TopicLessonNode
+    source: neo_curriculum.TopicNode
+    target: neo_curriculum.TopicLessonNode
 
 class TopicIncludesLearningStatement(BaseRelationship):
     __relationshiptype__: ClassVar[str] = 'TOPIC_INCLUDES_LEARNING_STATEMENT'
-    source: TopicNode
-    target: LearningStatementNode
+    source: neo_curriculum.TopicNode
+    target: neo_curriculum.LearningStatementNode
 
-class LearningStatementPartOfTopicLesson(BaseRelationship):
-    __relationshiptype__: ClassVar[str] = 'LEARNING_STATEMENT_PART_OF_LESSON'
-    source: LearningStatementNode
-    target: TopicLessonNode
+class LessonIncludesLearningStatement(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'LESSON_INCLUDES_LEARNING_STATEMENT'
+    source: neo_curriculum.TopicLessonNode
+    target: neo_curriculum.LearningStatementNode
 
 # Science-specific curriculum layer relationships
 class TopicLessonIncludesScienceLab(BaseRelationship):
     __relationshiptype__: ClassVar[str] = 'LESSON_INCLUDES_SCIENCE_LAB'
-    source: TopicLessonNode
-    target: ScienceLabNode
+    source: neo_curriculum.TopicLessonNode
+    target: neo_curriculum.ScienceLabNode
+    
+
+class KeyStageFollowsKeyStage(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'KEY_STAGE_FOLLOWS_KEY_STAGE'
+    source: neo_curriculum.KeyStageNode
+    target: neo_curriculum.KeyStageNode
+
+class YearGroupFollowsYearGroup(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'YEAR_GROUP_FOLLOWS_YEAR_GROUP'
+    source: neo_curriculum.YearGroupNode
+    target: neo_curriculum.YearGroupNode
+
+class KeyStageSyllabusFollowsKeyStageSyllabus(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'KEY_STAGE_SYLLABUS_FOLLOWS_KEY_STAGE_SYLLABUS'
+    source: neo_curriculum.KeyStageSyllabusNode
+    target: neo_curriculum.KeyStageSyllabusNode
+
+class YearGroupSyllabusFollowsYearGroupSyllabus(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'YEAR_GROUP_SYLLABUS_FOLLOWS_YEAR_GROUP_SYLLABUS'
+    source: neo_curriculum.YearGroupSyllabusNode
+    target: neo_curriculum.YearGroupSyllabusNode
+
+class TopicLessonFollowsTopicLesson(BaseRelationship):
+    __relationshiptype__: ClassVar[str] = 'LESSON_FOLLOWS_LESSON'
+    source: neo_curriculum.TopicLessonNode
+    target: neo_curriculum.TopicLessonNode

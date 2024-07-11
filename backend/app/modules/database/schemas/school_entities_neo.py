@@ -2,14 +2,13 @@ from typing import ClassVar
 from neontology import BaseNode
 
 # Neo4j Nodes and relationships using Neontology
-# Entity layer
-
+# School entities layer
 class SchoolNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'School'
     __primaryproperty__: ClassVar[str] = 'school_id'
     school_id: str
-    school_name: str
-    school_org_type: str
+    school_name_short: str
+    school_name_long: str
     school_address: str
     school_website: str
 

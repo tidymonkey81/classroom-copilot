@@ -109,7 +109,7 @@ def create_curriculum(dataframes, db_name):
                 if numeric_year_group not in year_group_nodes_created:
                     year_group_node = neo_curriculum.YearGroupNode(
                         year_group_id=f'Y{numeric_year_group}',
-                        year_group=numeric_year_group,
+                        year_group=str(numeric_year_group),
                         year_group_name=f"Year {numeric_year_group}"
                     )
                     neon.create_or_merge_neontology_node(year_group_node, database=db_name, operation='merge')

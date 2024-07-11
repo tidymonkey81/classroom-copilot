@@ -2,7 +2,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 import os
 import modules.logger_tool as logger
-log_name = 'api_routers_database_init_curriculum'
+log_name = 'api_modules_database_init_curriculum'
 user_profile = os.environ.get("USERPROFILE", "")
 app_dir = os.environ.get("APP_DIR", "")
 log_dir = os.path.join(user_profile, app_dir, "logs")
@@ -100,8 +100,6 @@ def create_curriculum(dataframes, db_name):
 
         related_yeargroups = sort_year_groups(yeargroupsyllabus_df[yeargroupsyllabus_df['KeyStage'] == ks_row['KeyStage']])
         
-        logging.info(related_yeargroups)
-    
         for yg_index, yg_row in related_yeargroups.iterrows():
             year_group = yg_row['YearGroup']
             numeric_year_group = pd.to_numeric(year_group, errors='coerce')
@@ -111,6 +109,7 @@ def create_curriculum(dataframes, db_name):
                 if numeric_year_group not in year_group_nodes_created:
                     year_group_node = neo_curriculum.YearGroupNode(
                         year_group_id=f'Y{numeric_year_group}',
+                        year_group=numeric_year_group,
                         year_group_name=f"Year {numeric_year_group}"
                     )
                     neon.create_or_merge_neontology_node(year_group_node, database=db_name, operation='merge')
@@ -141,8 +140,7 @@ def create_curriculum(dataframes, db_name):
                     database=db_name, operation='merge'
                 )
 
-            logging.info(f'numeric year group: {numeric_year_group} node year: {year_group_node.year_group_id}')
-            if pd.notna(numeric_year_group) and str(numeric_year_group) == str(year_group_node.year_group_id):
+            if pd.notna(numeric_year_group) and str(numeric_year_group) == str(year_group_node.year_group):
                 neon.create_or_merge_neontology_relationship(
                     neo_relationships.YearGroupHasYearGroupSyllabus(source=year_group_node, target=year_group_syllabus_node),
                     database=db_name, operation='merge'

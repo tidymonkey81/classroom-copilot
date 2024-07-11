@@ -6,9 +6,9 @@ from typing import ClassVar
 # Calendar layer
 class CalendarNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'Calendar'
-    __primaryproperty__: ClassVar[str] = 'calendar_id'
-    calendar_id: str
-    calendar_name: str
+    __primaryproperty__: ClassVar[str] = 'unique_id'
+    unique_id: str
+    name: str
 
 class CalendarYearNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'CalendarYear'

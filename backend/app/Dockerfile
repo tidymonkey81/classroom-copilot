@@ -17,4 +17,4 @@ COPY . .
 EXPOSE ${BACKEND_PORT}
 
 # Ensure commands run inside the virtual environment
-CMD /opt/venv/bin/uvicorn main:app --host 0.0.0.0 --port ${BACKEND_PORT}
+CMD /opt/venv/bin/uvicorn routers.main:app --host 0.0.0.0 --port ${BACKEND_PORT}

@@ -75,6 +75,7 @@ services:
       - neo4j_logs:/logs
       - neo4j_import:/var/lib/neo4j/import
       - neo4j_plugins:/plugins
+      - ./conf:/conf
     networks:
       - app-network
 

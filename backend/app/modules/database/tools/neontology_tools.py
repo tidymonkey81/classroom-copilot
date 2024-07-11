@@ -1,14 +1,25 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+import os
 import modules.logger_tool as logger
-
+log_name = 'api_modules_database_tools_neontology_tools'
+user_profile = os.environ.get("USERPROFILE", "")
+app_dir = os.environ.get("APP_DIR", "")
+log_dir = os.path.join(user_profile, app_dir, "logs")
+logging = logger.get_logger(
+    name=log_name,
+    log_level='DEBUG',
+    log_path=log_dir,
+    log_file=log_name,
+    runtime=True,
+    log_format='default'
+)
 from modules.database.tools.neontology.graphconnection import init_neontology
 from modules.database.tools.neontology.basenode import BaseNode
 from modules.database.tools.neontology.baserelationship import BaseRelationship
 from pydantic import ValidationError
-
 import os
 import neo4j
-
-logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
 
 # Initialize Neontology with the Neo4j database details
 def init_neo4j_connection(host=None, port=None, user=None, password=None):

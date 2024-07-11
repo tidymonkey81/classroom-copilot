@@ -1,15 +1,24 @@
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 import os
-
 import modules.logger_tool as logger
-os.environ['LOG_NAME'] = 'app'
-os.environ['LOG_DIR'] = 'logs'
-os.environ['LOG_LEVEL'] = 'DEBUG'
+log_name = 'api_main_fastapi'
+user_profile = os.environ.get("USERPROFILE", "")
+app_dir = os.environ.get("APP_DIR", "")
+log_dir = os.path.join(user_profile, app_dir, "logs")
+log_level = 'DEBUG'
+logging = logger.get_logger(
+    name=log_name,
+    log_level=log_level,
+    log_path=log_dir,
+    log_file=log_name,
+    runtime=True,
+    log_format='default'
+)
 
-logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
-
-from routers.database import admin, schools, calendar, timetable, curriculum, department, teacher, student
+from routers.dev.tests import timetable_test
+from routers.database import admin, schools, department, teacher, student
+from routers.database.init import get_data, calendar, timetable, curriculum
 from routers.transcribe import whisper_live, utterance
 from routers.llm.private.ollama import ollama
 from routers.llm.public.openai import openai
@@ -17,7 +26,7 @@ from routers.connections.arbor_router import router as arbor_router
 from routers.langchain.graph_qa import router as graph_qa_router
 
 from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI, Request, BackgroundTasks, WebSocket
+from fastapi import FastAPI, Request, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -34,17 +43,29 @@ app.add_middleware(
     expose_headers=["*"]
 )
 
-# Get the absolute path to the fastapi_frontend directory
-frontend_directory = os.path.join(os.path.dirname(__file__), 'frontend')
-
+# Frontend setup
+frontend_directory = os.path.join(os.path.dirname(__file__), '..', 'frontend')
 app.mount("/static", StaticFiles(directory=os.path.join(frontend_directory, 'static')), name="static")
 templates = Jinja2Templates(directory=os.path.join(frontend_directory, 'templates'))
 
-# Database Routes
+## Database Routes
+# Admin routes
 app.include_router(admin.router, prefix="/database/admin", tags=["Admin"])
+
+# Test routes
+app.include_router(timetable_test.router, prefix="/tests", tags=["Tests"])
+
+# Upload routes
+app.include_router(get_data.router, prefix="/database/upload", tags=["Upload"])
+
+# School routes
 app.include_router(schools.router, prefix="/database/schools", tags=["School"])
+
+# Schedule routes
 app.include_router(calendar.router, prefix="/database/calendar", tags=["Calendar"])
 app.include_router(timetable.router, prefix="/database/timetable", tags=["Timetable"])
+
+
 app.include_router(curriculum.router, prefix="/database/curriculum", tags=["Curriculum"])
 app.include_router(department.router, prefix="/database/department", tags=["Department"])
 app.include_router(teacher.router, prefix="/database/teacher", tags=["Teacher"])

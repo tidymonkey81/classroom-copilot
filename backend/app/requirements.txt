@@ -18,4 +18,3 @@ websocket-client
 jinja2
 langchain[all]
 langchain-community
-pytest-html

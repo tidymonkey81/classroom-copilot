@@ -16,7 +16,7 @@ ollama_host = os.getenv("OLLAMA_URL")
 ollama_port = os.getenv("OLLAMA_PORT")
 
 if not ollama_host or not ollama_port:
-    raise ValueError("Environment variables OLLAMA_LOCAL_URL or OLLAMA_LOCAL_PORT are not set")
+    raise ValueError("Environment variables OLLAMA_URL or OLLAMA_PORT are not set")
 
 client = Client(host=f'http://{ollama_host}:{ollama_port}')
 

@@ -75,19 +75,15 @@ def create_log_dir(choice):
     return log_dir
 
 def run_tests(test_file, log_dir):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    test_name = os.path.basename(test_file).replace(".py", "")
-    result = subprocess.run([
+    pytest_command = [
         "pytest", test_file,
-        f"--junitxml={os.path.join(log_dir, f'{test_name}_pytest_report_{timestamp}.xml')}",
-        f"--html={os.path.join(log_dir, f'{test_name}_pytest_report_{timestamp}.html')}",
+        f"--junitxml={os.path.join(log_dir, f'{os.path.basename(test_file).replace('.py', '')}_pytest_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xml')}",
+        f"--html={os.path.join(log_dir, f'{os.path.basename(test_file).replace('.py', '')}_pytest_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html')}",
         "--self-contained-html"
-    ])
-    if result.returncode != 0:
-        print(f"{result.returncode} tests failed.")
-        sys.exit(result.returncode)
-    else:
-        print("All tests passed.")
+    ]
+    print("Running command:", ' '.join(pytest_command))
+    result = subprocess.run(pytest_command, check=True)
+    return result
 
 def main():
     load_env()

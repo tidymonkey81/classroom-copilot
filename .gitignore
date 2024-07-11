@@ -43,6 +43,9 @@ plugins/*
 # Logs
 logs/*
 
+# Conf
+conf/*
+
 # Model directories
 backend/whisper_live_server/whisper_live/models/*
 

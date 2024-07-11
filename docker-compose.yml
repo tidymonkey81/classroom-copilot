@@ -75,7 +75,9 @@ services:
       - neo4j_logs:/logs
       - neo4j_import:/var/lib/neo4j/import
       - neo4j_plugins:/plugins
+      - neo4j_conf:/conf
       - ./conf:/conf
+      - ./plugins:/plugins
     networks:
       - app-network
 
@@ -98,4 +100,7 @@ volumes:
     driver: local
   neo4j_plugins:
     name: neo4j_plugins
+    driver: local
+  neo4j_conf:
+    name: neo4j_conf
     driver: local

@@ -37,6 +37,12 @@ dist-ssr
 # Data 
 data/*
 
+# Plugins
+plugins/*
+
+# Logs
+logs/*
+
 # Model directories
 backend/whisper_live_server/whisper_live/models/*
 

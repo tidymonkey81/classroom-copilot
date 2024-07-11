@@ -12,6 +12,7 @@ class YearGroupNode(BaseNode):
     __primarylabel__: ClassVar[str] = 'YearGroup'
     __primaryproperty__: ClassVar[str] = 'year_group_id'
     year_group_id: str
+    year_group: Optional[str] = None
     year_group_name: Optional[str] = None
 
 class KeyStageSyllabusNode(BaseNode):

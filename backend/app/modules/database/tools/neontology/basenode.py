@@ -8,7 +8,6 @@ from .graphconnection import GraphConnection
 
 B = TypeVar("B", bound="BaseNode")
 
-
 class BaseNode(CommonModel):  # pyre-ignore[13]
     __primaryproperty__: ClassVar[str]
     __primarylabel__: ClassVar[Optional[str]]

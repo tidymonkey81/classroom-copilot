@@ -1,9 +1,21 @@
-import modules.logger_tool as logger
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 import os
+import modules.logger_tool as logger
+log_name = 'api_modules_database_tools_neo4j_session_tools'
+user_profile = os.environ.get("USERPROFILE", "")
+app_dir = os.environ.get("APP_DIR", "")
+log_dir = os.path.join(user_profile, app_dir, "logs")
+logging = logger.get_logger(
+    name=log_name,
+    log_level='DEBUG',
+    log_path=log_dir,
+    log_file=log_name,
+    runtime=True,
+    log_format='default'
+)
 import modules.database.tools.queries as query
 from contextlib import suppress
-
-logging = logger.get_logger(os.environ['LOG_NAME'], log_level=os.environ['LOG_LEVEL'], log_path=os.environ['LOG_DIR'], log_file=os.environ['LOG_NAME'])
 
 def delete_all_nodes_and_relationships(session):
     total_deleted = 0
